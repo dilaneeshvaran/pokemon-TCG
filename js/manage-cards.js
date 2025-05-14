@@ -1,14 +1,24 @@
 import { drawPack } from "./pokemon-api.js";
+import { displayDeckCards } from "./display-cards.js";
 
 let handCard = {};
-let deckCards = [{}];
+let deckCards = [];
 
-localStorage.setItem("handCard", JSON.stringify(handCard));
+const savedDeckCards = JSON.parse(localStorage.getItem("deckCards"));
+if (savedDeckCards) {
+  deckCards = savedDeckCards;
+}
 
 const drawNewCardsBtn = document.getElementById("drawNewCardsBtn");
 
+//tirer 5 nouvelles cartes
 drawNewCardsBtn.addEventListener("click", () => {
   deckCards = deckCards.concat(drawPack());
   localStorage.setItem("deckCards", JSON.stringify(deckCards));
   console.log(deckCards);
+  displayDeckCards();
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  displayDeckCards();
 });
