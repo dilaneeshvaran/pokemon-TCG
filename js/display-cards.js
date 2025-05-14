@@ -15,23 +15,15 @@ export function displayDeckCards() {
     if (!pokemon.name) return;
 
     const card = document.createElement("div");
-    card.className = "pokemon-card";
+    card.className = `pokemon-card type-${pokemon.type}`;
     card.dataset.pokemonId = pokemon.id;
     card.innerHTML = `
-      <div class="card-header">
-        <h3>${pokemon.name}</h3>
-        <span class="type ${pokemon.type}">${pokemon.type}</span>
-      </div>
-      <div class="card-image">
-        <img src="${pokemon.image}" alt="${pokemon.name}">
-      </div>
-      <div class="card-stats">
-        <p>HP: ${pokemon.hp}</p>
-        <p>Attack: ${pokemon.attack}</p>
-        <p>Defense: ${pokemon.defense}</p>
-        <p>Speed: ${pokemon.speed}</p>
-      </div>
-    `;
+  <img src="${pokemon.image}" alt="${pokemon.name}">
+  <div class="card-body">
+    <h5 class="card-title">${pokemon.name}</h5>
+    <div class="card-type">${pokemon.type}</div>
+  </div>
+`;
 
     deckContainer.appendChild(card);
   });
