@@ -1,5 +1,5 @@
 const pokemonList = [
-  // type Pokemon : Normal
+  //type Pokemon : Normal
   {
     id: 1,
     name: "Eevee",
@@ -34,7 +34,7 @@ const pokemonList = [
       "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/128.png",
   },
 
-  //  type Pokemon : Feu
+  //type Pokemon : Feu
   {
     id: 4,
     name: "Charizard",
@@ -69,7 +69,7 @@ const pokemonList = [
       "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/136.png",
   },
 
-  //  type Pokemon : Eau
+  //type Pokemon : Eau
   {
     id: 7,
     name: "Blastoise",
@@ -104,7 +104,7 @@ const pokemonList = [
       "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/130.png",
   },
 
-  //  type Pokemon : Terre
+  //type Pokemon : Terre
   {
     id: 10,
     name: "Venusaur",
@@ -139,7 +139,7 @@ const pokemonList = [
       "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/103.png",
   },
 
-  //  type Pokemon : electric
+  //type Pokemon : electric
   {
     id: 13,
     name: "Pikachu",
@@ -174,7 +174,7 @@ const pokemonList = [
       "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/125.png",
   },
 
-  //  type Pokemon : Psychic
+  //type Pokemon : Psychic
   {
     id: 16,
     name: "Mewtwo",
@@ -209,7 +209,7 @@ const pokemonList = [
       "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/196.png",
   },
 
-  // Autres Pokémons
+  //autres Pokémons
   {
     id: 19,
     name: "Dragonite",
@@ -343,3 +343,27 @@ const pokemonList = [
       "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/208.png",
   },
 ];
+
+//tirer 5 cartes aléatoires et retourne un array des objets
+export function drawPack() {
+  let packCards = [];
+  const availableIndices = Array.from(
+    { length: pokemonList.length },
+    (_, i) => i
+  );
+
+  //tirer 5 cartes aléatoires
+  for (let i = 0; i < 5; i++) {
+    if (availableIndices.length === 0) break;
+
+    const randomIndex = Math.floor(Math.random() * availableIndices.length);
+    const pokemonIndex = availableIndices[randomIndex];
+
+    //eviter la duplication utilisant l'index
+    availableIndices.splice(randomIndex, 1);
+
+    packCards.push(pokemonList[pokemonIndex]);
+  }
+
+  return packCards;
+}
