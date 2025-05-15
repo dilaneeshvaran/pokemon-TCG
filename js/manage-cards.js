@@ -1,5 +1,6 @@
 import { drawPack } from "./pokemon-api.js";
 import { displayDeckCards } from "./display-cards.js";
+import { countDown } from "./display-timer.js";
 
 let handCard = {};
 let deckCards = [];
@@ -17,6 +18,7 @@ drawNewCardsBtn.addEventListener("click", () => {
   localStorage.setItem("deckCards", JSON.stringify(deckCards));
   console.log(deckCards);
   displayDeckCards();
+  countDown();
 });
 
 document.addEventListener("DOMContentLoaded", () => {
