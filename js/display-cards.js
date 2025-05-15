@@ -1,9 +1,9 @@
 const handContainer = document.getElementById("handContainer");
 const deckContainer = document.getElementById("deckContainer");
 
-let deckCards = JSON.parse(localStorage.getItem("deckCards")) || [];
-
 export function displayDeckCards() {
+  let deckCards = JSON.parse(localStorage.getItem("deckCards")) || [];
+
   deckContainer.innerHTML = "";
 
   if (!deckCards || deckCards.length === 0 || deckCards[0].id === undefined) {
@@ -32,7 +32,6 @@ export function displayDeckCards() {
 document.addEventListener("DOMContentLoaded", displayDeckCards);
 window.addEventListener("storage", function (e) {
   if (e.key === "deckCards") {
-    deckCards = JSON.parse(e.newValue) || [];
     displayDeckCards();
   }
 });
