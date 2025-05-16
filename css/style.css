@@ -47,6 +47,7 @@ body {
 .pokemon-card .card-body {
   padding: 5px;
   text-align: center;
+  margin-top: -25px;
 }
 
 .pokemon-card .card-title {
@@ -61,6 +62,7 @@ body {
 .pokemon-card .card-type {
   font-size: 12px;
   color: #666;
+  -webkit-text-stroke: 0.5px rgb(0, 0, 0);
 }
 
 .type-normal {
