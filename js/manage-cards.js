@@ -2,12 +2,19 @@ import { drawPack } from "./pokemon-api.js";
 import { displayDeckCards } from "./display-cards.js";
 import { countDown } from "./display-timer.js";
 
-let handCard = {};
+let handCards = [];
 let deckCards = [];
 
 const savedDeckCards = JSON.parse(localStorage.getItem("deckCards"));
 if (savedDeckCards) {
   deckCards = savedDeckCards;
+}
+
+const savedHandCards = JSON.parse(localStorage.getItem("handCards"));
+if (savedHandCards) {
+  handCards = savedHandCards;
+} else {
+  localStorage.setItem("handCards", JSON.stringify(handCards));
 }
 
 const drawNewCardsBtn = document.getElementById("drawNewCardsBtn");
