@@ -32,8 +32,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const cardIndex = deckCards.findIndex((card) => card.id == cardId);
 
     const movedCard = deckCards.splice(cardIndex, 1)[0];
-    handCards = [movedCard];
-    deckCards.push(movedCard);
+
+    if (handCards.length < 4) {
+      handCards.push(movedCard);
+    } else if (handCards.length == 4) {
+      const firstCardInHand = handCards[0];
+      handCards.shift();
+      handCards.push(movedCard);
+      deckCards.push(firstCardInHand);
+    }
 
     localStorage.setItem("deckCards", JSON.stringify(deckCards));
     localStorage.setItem("handCards", JSON.stringify(handCards));
