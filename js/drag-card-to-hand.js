@@ -32,7 +32,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const cardIndex = deckCards.findIndex((card) => card.id == cardId);
 
     const movedCard = deckCards.splice(cardIndex, 1)[0];
-    handCards.push(movedCard);
+    handCards = [movedCard];
+    deckCards.push(movedCard);
 
     localStorage.setItem("deckCards", JSON.stringify(deckCards));
     localStorage.setItem("handCards", JSON.stringify(handCards));
