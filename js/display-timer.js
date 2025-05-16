@@ -17,7 +17,8 @@ export function updateCountDown() {
 
   if (totalTimeInSeconds < 0) {
     clearInterval(timerInterval);
-    timerDisplay.textContent = "";
+    timerDisplay.textContent =
+      "Vous pouvez tirer un nouveau packet maintenant !";
     document.getElementById("drawNewCardsBtn").disabled = false;
   }
 }
