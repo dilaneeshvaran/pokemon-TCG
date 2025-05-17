@@ -42,10 +42,23 @@
         <button id="battleBtn">Lancer une bataille avec un dresseur</button>
       </div>
     </div>
+
+    <div id="cardDetailsModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="card-details-title" id="cardDetailsTitle">
+            Détails de la carte
+          </h5>
+          <button class="card-details-btn-close" aria-label="Fermer"></button>
+        </div>
+        <div id="cardDetailsContent"></div>
+      </div>
+    </div>
     <script type="module" src="js/manage-cards.js"></script>
     <script type="module" src="js/pokemon-api.js"></script>
     <script type="module" src="js/display-cards.js"></script>
     <script type="module" src="js/drag-card-to-hand.js"></script>
     <script type="module" src="js/display-timer.js"></script>
+    <script type="module" src="js/display-card-details.js"></script>
   </body>
 </html>

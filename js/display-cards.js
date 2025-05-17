@@ -1,3 +1,5 @@
+import { showCardDetails } from "./display-card-details.js";
+
 const handContainer = document.getElementById("handContainer");
 const deckContainer = document.getElementById("deckContainer");
 
@@ -6,7 +8,7 @@ export function displayDeckCards() {
 
   deckContainer.innerHTML = "";
 
-  if (!deckCards || deckCards.length === 0 || deckCards[0].id === undefined) {
+  if (!deckCards || deckCards.length === 0) {
     deckContainer.innerHTML = "<p>Votre pioche est vide. Tirez des cartes!</p>";
     return;
   }
@@ -28,6 +30,10 @@ export function displayDeckCards() {
     <div class="card-type">${pokemon.type}</div>
   </div>
 `;
+
+    card.addEventListener("click", () => {
+      showCardDetails(pokemon);
+    });
 
     deckContainer.appendChild(card);
   });
@@ -59,6 +65,10 @@ export function displayHandCards() {
         <div class="card-type">${pokemon.type}</div>
       </div>
     `;
+
+    card.addEventListener("click", () => {
+      showCardDetails(pokemon);
+    });
 
     handContainer.appendChild(card);
   });
