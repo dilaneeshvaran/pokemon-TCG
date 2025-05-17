@@ -36,6 +36,10 @@ document.addEventListener("DOMContentLoaded", () => {
   if (exitBattleBtn) {
     exitBattleBtn.addEventListener("click", () => {
       if (confirm("Voulez vous quitter la bataille ?")) {
+        localStorage.removeItem("playerActivePokemonCard");
+        localStorage.removeItem("botActivePokemonCard");
+        localStorage.removeItem("battleHandCards");
+        localStorage.removeItem("battleBotCards");
         window.location.href = "index.html";
       }
     });

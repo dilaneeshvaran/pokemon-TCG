@@ -61,7 +61,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   if (botCards) {
-    const battleBotCards = JSON.parse(localStorage.getItem("botCards")) || [];
+    const battleBotCards =
+      JSON.parse(localStorage.getItem("battleBotCards")) || [];
 
     botCards.innerHTML = "";
 
