@@ -1,12 +1,15 @@
 document.addEventListener("DOMContentLoaded", () => {
   const playerCards = document.getElementById("playerCards");
   const playerActivePokemon = document.getElementById("playerActivePokemon");
+  const botCards = document.getElementById("botCards");
+  const botActivePokemon = document.getElementById("botActivePokemon");
 
   if (playerCards) {
-    const battleCards = JSON.parse(localStorage.getItem("battleCards")) || [];
+    const battleHandCards =
+      JSON.parse(localStorage.getItem("battleHandCards")) || [];
     playerCards.innerHTML = "";
 
-    battleCards.forEach((pokemon) => {
+    battleHandCards.forEach((pokemon) => {
       if (!pokemon.name) return;
 
       const card = document.createElement("div");
@@ -46,9 +49,9 @@ document.addEventListener("DOMContentLoaded", () => {
               <div class="card-type">${playerActivePokemonCard.type}</div>
               
               <div class="stats">
-                <div class="stat hp">PV: ${playerActivePokemonCard.hp}</div>
-                <div class="stat attack">ATQ: ${playerActivePokemonCard.attack}</div>
-                <div class="stat defense">DEF: ${playerActivePokemonCard.defense}</div>
+                <div class="hp">PV: ${playerActivePokemonCard.hp}</div>
+                <div class="attack">ATQ: ${playerActivePokemonCard.attack}</div>
+                <div class="defense">DEF: ${playerActivePokemonCard.defense}</div>
               </div>
             </div>
           </div>

@@ -10,10 +10,10 @@ export function showCardDetails(card) {
             <img src="${card.image}" class="card-details-img">
             <div class="card-type-badge type-${card.type}">${card.type}</div>
             <div class="card-stats">
-                <div><span>PV:</span> <span>${card.hp}</span></div>
-                <div><span>Attaque:</span> <span>${card.attack}</span></div>
-                <div><span>Defense:</span> <span>${card.defense}</span></div>
-                <div><span>Vitesse:</span> <span>${card.speed}</span></div>
+                <div><span class="card-details-hp">PV:</span> <span>${card.hp}</span></div>
+                <div><span class="card-details-attack">Attaque:</span> <span>${card.attack}</span></div>
+                <div><span class="card-details-defense">Defense:</span> <span>${card.defense}</span></div>
+                <div><span class="card-details-speed">Vitesse:</span> <span>${card.speed}</span></div>
             </div>
         `;
 

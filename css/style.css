@@ -282,6 +282,22 @@ body {
  */
 }
 
+.card-details-hp {
+  color: green;
+}
+
+.card-details-attack {
+  color: red;
+}
+
+.card-details-defense {
+  color: blue;
+}
+
+.card-details-speed {
+  color: black;
+}
+
 @media (max-width: 768px) {
   .pokemon-card {
     width: 100px;
