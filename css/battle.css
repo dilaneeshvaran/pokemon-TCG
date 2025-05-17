@@ -18,9 +18,10 @@
 
 #exitBattleBtn {
   color: white;
-  padding: 0.3rem;
+  padding: 1rem;
   border-radius: 0.5rem;
   background-color: #ff0000;
+  font-size: 20px;
 }
 
 #exitBattleBtn:hover {
@@ -90,9 +91,10 @@
 
 .attack-btn {
   color: white;
-  padding: 0.3rem;
+  padding: 1rem;
   border-radius: 0.5rem;
   background-color: #cc0000;
+  font-size: 20px;
 }
 
 .attack-btn:hover {
@@ -101,9 +103,10 @@
 
 .defend-btn {
   color: white;
-  padding: 0.3rem;
+  padding: 1rem;
   border-radius: 0.5rem;
   background-color: #3b4cca;
+  font-size: 20px;
 }
 
 .defend-btn:hover {
@@ -116,49 +119,9 @@
   flex-wrap: wrap;
   gap: 10px;
   min-height: 150px;
-}
-
-/* cartes */
-.pokemon-card {
-  width: 120px;
-  height: 180px;
-  background-color: white;
-  border-radius: 10px;
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-  transition: transform 0.3s ease;
-}
-
-.pokemon-card:hover {
-  transform: translateY(-5px);
-}
-
-.pokemon-card img {
-  width: 80px;
-  height: 80px;
-  object-fit: contain;
-}
-
-.pokemon-card .card-name {
-  font-weight: bold;
-  margin: 5px 0;
-  font-size: 14px;
-  text-align: center;
-}
-
-.pokemon-card .card-stats {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  font-size: 12px;
-}
-
-.pokemon-card .card-stats span {
-  margin: 2px 0;
+  border: 2px dashed #ccc;
+  border-radius: 5px;
+  padding: 15px;
 }
 
 /* modal  */
@@ -234,4 +197,58 @@
 
 .defending {
   animation: defend 0.5s ease-in-out;
+}
+
+.pokemon-card .stats {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 5px;
+  font-size: 12px;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 4px;
+  padding: 5px;
+}
+
+.pokemon-card .stats div {
+  display: flex;
+  justify-content: space-between;
+  gap: 5px;
+}
+
+.active-pokemon .pokemon-card {
+  width: 140px;
+  height: 190px;
+}
+
+.active-pokemon .pokemon-card .card-title {
+  font-size: 16px;
+  margin: 0 0 2px 0;
+}
+
+.active-pokemon .pokemon-card img {
+  height: 110px;
+}
+
+.battlePokemonImage {
+  margin-top: -15px;
+}
+
+.player-cards .pokemon-card {
+  width: 140px;
+  height: 190px;
+}
+
+.player-cards .pokemon-card img {
+  height: 110px;
+  margin-top: -15px;
+}
+
+.player-cards .pokemon-card .card-title {
+  font-size: 16px;
+  margin: 0 0 2px 0;
+}
+
+.player-cards {
+  padding-bottom: 25px;
 }
