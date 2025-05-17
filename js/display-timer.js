@@ -27,6 +27,10 @@ function loadTimerState() {
         "Vous pouvez tirer un nouveau packet maintenant !";
       document.getElementById("drawNewCardsBtn").disabled = false;
     }
+  } else {
+    timerDisplay.textContent =
+      "Vous pouvez tirer un nouveau packet maintenant !";
+    document.getElementById("drawNewCardsBtn").disabled = false;
   }
 }
 
