@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pokémon Battle Arena</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="./css/battle.css" />
+  </head>
+  <body>
+    <div class="battle-container">
+      <div class="battle-header">
+        <h1 class="battle-title">Pokémon Battle Arena</h1>
+        <button id="exitBattleBtn">Quitter la bataille</button>
+      </div>
+
+      <div class="battle-arena">
+        <div class="player-side">
+          <h2>Vos cartes</h2>
+          <div id="playerCards" class="player-cards"></div>
+        </div>
+
+        <div class="opponent-side">
+          <h2>Adversaire</h2>
+          <div id="botCards" class="bot-cards"></div>
+        </div>
+
+        <div class="battle-actions">
+          <button id="attackBtn" class="attack-btn">Attaquer</button>
+          <button id="defendBtn" class="defend-btn">Défendre</button>
+        </div>
+
+        <div class="active-pokemon-area">
+          <div id="playerActivePokemon" class="active-pokemon"></div>
+          <div id="botActivePokemon" class="active-pokemon"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="selectPokemonModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="select-pokemon-title" id="selectPokemonTitle">
+            Choisissez une carte !
+          </h5>
+        </div>
+        <div id="selectPokemonContent"></div>
+      </div>
+    </div>
+    <script type="module" src="js/battle-system.js"></script>
+  </body>
+</html>
