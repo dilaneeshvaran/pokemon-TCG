@@ -252,3 +252,15 @@
 .player-cards {
   padding-bottom: 25px;
 }
+
+.stats .hp {
+  color: green;
+}
+
+.stats .attack {
+  color: red;
+}
+
+.stats .defense {
+  color: blue;
+}

@@ -39,9 +39,9 @@ document.addEventListener("DOMContentLoaded", () => {
           <h5 class="card-title">${pokemon.name}</h5>
           <div class="card-type">${pokemon.type}</div>
           <div class="stats">
-                <div>PV: ${pokemon.hp}</div>
-                <div>ATQ: ${pokemon.attack}</div>
-                <div>DEF: ${pokemon.defense}</div>
+                <div class="stat hp">PV: ${pokemon.hp}</div>
+                <div class="stat attack">ATQ: ${pokemon.attack}</div>
+                <div class="stat defense">DEF: ${pokemon.defense}</div>
               </div>
         </div>
         `;
@@ -65,9 +65,9 @@ document.addEventListener("DOMContentLoaded", () => {
               <div class="card-type">${playerActivePokemonCard.type}</div>
               
               <div class="stats">
-                <div>PV: ${playerActivePokemonCard.hp}</div>
-                <div>ATQ: ${playerActivePokemonCard.attack}</div>
-                <div>DEF: ${playerActivePokemonCard.defense}</div>
+                <div class="stat hp">PV: ${playerActivePokemonCard.hp}</div>
+                <div class="stat attack">ATQ: ${playerActivePokemonCard.attack}</div>
+                <div class="stat defense">DEF: ${playerActivePokemonCard.defense}</div>
               </div>
             </div>
           </div>
