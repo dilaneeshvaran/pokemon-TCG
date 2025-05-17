@@ -12,12 +12,17 @@ document.addEventListener("DOMContentLoaded", () => {
       const randomIndex = Math.floor(Math.random() * botCards.length);
       botCards.splice(randomIndex, 1);
 
+      console.log(botCards);
+
       if (handCards.length > 0 && botCards.length > 0) {
         localStorage.setItem(
           "playerActivePokemonCard",
           JSON.stringify(handCards[0])
         );
-        localStorage.setItem("botActivePokemon", JSON.stringify(botCards[0]));
+        localStorage.setItem(
+          "botActivePokemonCard",
+          JSON.stringify(botCards[0])
+        );
         handCards.shift();
         botCards.shift();
         localStorage.setItem("battleHandCards", JSON.stringify(handCards));

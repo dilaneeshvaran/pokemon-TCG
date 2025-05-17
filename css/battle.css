@@ -119,7 +119,7 @@
   flex-wrap: wrap;
   gap: 10px;
   min-height: 150px;
-  border: 2px dashed #ccc;
+  border: 2px dashed #adadad;
   border-radius: 5px;
   padding: 15px;
 }
@@ -234,22 +234,26 @@
   margin-top: -15px;
 }
 
-.player-cards .pokemon-card {
+.player-cards .pokemon-card,
+.bot-cards .pokemon-card {
   width: 140px;
   height: 190px;
 }
 
-.player-cards .pokemon-card img {
+.player-cards .pokemon-card img,
+.bot-cards .pokemon-card img {
   height: 110px;
   margin-top: -15px;
 }
 
-.player-cards .pokemon-card .card-title {
+.player-cards .pokemon-card .card-title,
+.bot-cards .pokemon-card .card-title {
   font-size: 16px;
   margin: 0 0 2px 0;
 }
 
-.player-cards {
+.player-cards,
+.bot-cards {
   padding-bottom: 25px;
 }
 
