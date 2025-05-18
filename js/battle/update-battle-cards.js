@@ -51,6 +51,7 @@ export function updateBotActivePokemon(pokemon) {
       const card = botActivePokemon.querySelector(".pokemon-card");
       if (card) card.classList.remove("card-updated");
     }, 1000);
+    removeCardFromBotDeck(pokemon.id);
   }
 }
 
@@ -81,6 +82,15 @@ export function updatePlayerActivePokemon(pokemon) {
 export function removeCardFromHand(cardId) {
   const cardElement = document.querySelector(
     `#playerCards .pokemon-card[data-pokemon-id="${cardId}"]`
+  );
+  if (cardElement) {
+    cardElement.remove();
+  }
+}
+
+export function removeCardFromBotDeck(cardId) {
+  const cardElement = document.querySelector(
+    `#botCards .pokemon-card[data-pokemon-id="${cardId}"]`
   );
   if (cardElement) {
     cardElement.remove();
