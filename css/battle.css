@@ -357,3 +357,31 @@
     opacity: 0.6;
   }
 }
+
+.battle-log {
+  width: 200px;
+  min-height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+}
+
+.battle-log-message {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

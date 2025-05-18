@@ -1,30 +1,14 @@
-const attackBtn = document.getElementById("attackBtn");
-const defendBtn = document.getElementById("defendBtn");
 const playerSelectedAction = document.getElementById("playerSelectedAction");
 const botSelectedAction = document.getElementById("botSelectedAction");
 
-if (attackBtn && defendBtn) {
-  attackBtn.addEventListener("click", () => {
-    displayPlayerAction("attack");
-    const botChoice = Math.random() > 0.5 ? "attack" : "defend";
-    displayBotAction(botChoice);
-  });
-
-  defendBtn.addEventListener("click", () => {
-    displayPlayerAction("defend");
-    const botChoice = Math.random() > 0.5 ? "attack" : "defend";
-    displayBotAction(botChoice);
-  });
-}
-
-function displayPlayerAction(action) {
+export function displayPlayerAction(action) {
   if (playerSelectedAction) {
     playerSelectedAction.innerHTML = createActionBadge(action);
     playerSelectedAction.className = "player-selected-action";
   }
 }
 
-function displayBotAction(action) {
+export function displayBotAction(action) {
   if (botSelectedAction) {
     botSelectedAction.innerHTML = createActionBadge(action);
     botSelectedAction.className = "bot-selected-action";
