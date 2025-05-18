@@ -86,11 +86,15 @@ export function processBattleActions(playerAction, botAction) {
 
   setTimeout(() => {
     if (playerDamageTaken > 0) {
-      displayPlayerActionResult(`-${playerDamageTaken}`);
+      displayPlayerActionResult(`-${playerDamageTaken} PV`);
+    } else if (botDamageTaken === 0 && botAction === "attack") {
+      displayPlayerActionResult("Bloqué!");
     }
 
     if (botDamageTaken > 0) {
-      displayBotActionResult(`-${botDamageTaken}`);
+      displayBotActionResult(`-${botDamageTaken} PV`);
+    } else if (playerDamageTaken === 0 && playerAction === "attack") {
+      displayBotActionResult("Bloqué!");
     }
   }, 1000);
 }

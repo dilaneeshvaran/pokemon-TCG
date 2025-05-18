@@ -387,17 +387,26 @@
 }
 
 .result-badge {
-  position: absolute;
-  top: -15px;
-  right: -15px;
-  background-color: white;
-  color: #333;
+  background: #ffdddd;
+  color: rgb(0, 0, 0);
+  padding: 6px 12px;
   font-weight: bold;
-  padding: 5px 10px;
-  border-radius: 50%;
-  font-size: 14px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  animation: damage-pop 0.8s ease-out;
+  border-radius: 10px;
+  display: inline-block;
+}
+
+.damage-badge {
+  background-color: #ffffff;
+  animation: pop-in 0.5s ease-out;
+  border: 1px solid #9d0000;
+  color: #9d0000;
+}
+
+.blocked-badge {
+  background-color: #ffffff;
+  animation: pop-in 0.5s ease-out;
+  border: 1px solid #000a9d;
+  color: #000a9d;
 }
 
 @keyframes damage-pop {
@@ -413,9 +422,4 @@
     transform: scale(1);
     opacity: 1;
   }
-}
-
-.damage-badge {
-  background-color: #cc0000;
-  color: white;
 }

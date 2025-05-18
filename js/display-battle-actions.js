@@ -37,7 +37,13 @@ export function displayBotActionResult(resultText) {
 }
 
 function createResultBadge(text) {
-  return `<div class="result-badge">
+  let resultBadgeClass = "";
+  if (text == "Bloqué!") {
+    resultBadgeClass = "blocked";
+  } else {
+    resultBadgeClass = "damage";
+  }
+  return `<div class="result-badge ${resultBadgeClass}-badge">
               <span class="action-text">${text}</span>
             </div>`;
 }

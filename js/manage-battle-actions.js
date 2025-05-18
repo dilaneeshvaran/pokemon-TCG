@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
     processBattleActions(playerAction, botChoice);
-    await new Promise((resolve) => setTimeout(resolve, 4000));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
 
     if (playerSelectedAction) {
       playerSelectedAction.innerHTML = "";
