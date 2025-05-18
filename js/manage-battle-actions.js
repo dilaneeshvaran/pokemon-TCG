@@ -1,8 +1,9 @@
-import { getTypeAdvantageInt } from "./card-type-advantage.js";
 import {
   displayBotAction,
   displayPlayerAction,
 } from "./display-battle-actions.js";
+
+import { processBattleActions } from "./battle-logic.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const attackBtn = document.getElementById("attackBtn");
@@ -18,42 +19,45 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function handlePlayerAction(playerAction) {
-    displayPlayerAction(playerAction);
-
     if (battleActions) {
       battleActions.style.display = "none";
     }
+
+    displayPlayerAction(playerAction);
 
     if (battleLog) {
       battleLog.innerHTML = `<div class="battle-log-message">Tour de l'adversaire...</div>`;
     }
 
-    const delayInSeconds = Math.floor(Math.random() * 4) + 2;
+    const delayInSeconds = Math.floor(Math.random() * 3) + 2;
     await new Promise((resolve) => setTimeout(resolve, delayInSeconds * 1000));
 
     const botChoice = Math.random() > 0.5 ? "attack" : "defend";
     displayBotAction(botChoice);
 
     processBattleLog(playerAction, botChoice);
-    processBattleActions();
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    processBattleActions(playerAction, botChoice);
+    await new Promise((resolve) => setTimeout(resolve, 4000));
+
+    if (playerSelectedAction) {
+      playerSelectedAction.innerHTML = "";
+    }
+
+    if (botSelectedAction) {
+      botSelectedAction.innerHTML = "";
+    }
 
     setTimeout(() => {
-      if (playerSelectedAction) {
-        playerSelectedAction.innerHTML = "";
-      }
-
-      if (botSelectedAction) {
-        botSelectedAction.innerHTML = "";
-      }
-
       if (battleActions) {
         battleActions.style.display = "flex";
       }
 
       if (battleLog) {
-        battleLog.innerHTML = "";
+        battleLog.innerHTML = "Votre tour !";
       }
-    }, 2000);
+    }, 1000);
   }
 
   function processBattleLog(playerAction, botAction) {
@@ -72,14 +76,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
       battleLog.innerHTML = `<div class="battle-log-message">${message}</div>`;
     }
-  }
-
-  function processBattleActions() {
-    const playerActivePokemonCard = JSON.parse(
-      localStorage.getItem("playerActivePokemonCard")
-    );
-    const botActivePokemonCard = JSON.parse(
-      localStorage.getItem("botActivePokemonCard")
-    );
   }
 });

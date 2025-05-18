@@ -23,3 +23,21 @@ function createActionBadge(action) {
               <span class="action-text">${text}</span>
             </div>`;
 }
+
+export function displayPlayerActionResult(resultText) {
+  if (playerSelectedAction) {
+    playerSelectedAction.innerHTML = createResultBadge(resultText);
+  }
+}
+
+export function displayBotActionResult(resultText) {
+  if (botSelectedAction) {
+    botSelectedAction.innerHTML = createResultBadge(resultText);
+  }
+}
+
+function createResultBadge(text) {
+  return `<div class="result-badge">
+              <span class="action-text">${text}</span>
+            </div>`;
+}
