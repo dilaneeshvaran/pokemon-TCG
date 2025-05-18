@@ -6,6 +6,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const playerActivePokemon = document.getElementById("playerActivePokemon");
   const botCards = document.getElementById("botCards");
   const botActivePokemon = document.getElementById("botActivePokemon");
+  const battleState = localStorage.getItem("battleState");
+  const battleLog = document.getElementById("battleLog");
 
   if (playerCards) {
     const battleHandCards =
@@ -27,6 +29,11 @@ document.addEventListener("DOMContentLoaded", () => {
         card.dataset.pokemonId = pokemon.id;
         card.id = `pokemon-card-${pokemon.id}`;
         card.innerHTML = generateCardHTML(pokemon);
+
+        if (battleState === "playerSelecting") {
+          card.setAttribute("draggable", true);
+          card.classList.add("selectable-card");
+        }
       }
 
       playerCards.appendChild(card);
@@ -43,22 +50,32 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.getItem("botActivePokemonCard")
       );
 
-      if (playerActivePokemonCard && botActivePokemonCard) {
-        const typeAdvantage = getTypeAdvantageString(
-          playerActivePokemonCard.type,
-          botActivePokemonCard.type
-        );
+      if (battleState === "playerSelecting") {
+        if (battleLog) {
+          battleLog.innerHTML = `<div class="battle-log-message">Choisissez une nouvelle carte Pokémon!</div>`;
+        }
+        playerActivePokemon.classList.add("active-card-dropzone");
+        return;
+      }
+
+      if (playerActivePokemonCard) {
+        const typeAdvantage = botActivePokemonCard
+          ? getTypeAdvantageString(
+              playerActivePokemonCard.type,
+              botActivePokemonCard.type
+            )
+          : "";
 
         playerActivePokemon.innerHTML = `
-      <div class="pokemon-card type-${playerActivePokemonCard.type}">
-          ${generateCardHTML(
-            playerActivePokemonCard,
-            false,
-            true,
-            typeAdvantage
-          )}
-      </div>
-      `;
+        <div class="pokemon-card type-${playerActivePokemonCard.type}">
+            ${generateCardHTML(
+              playerActivePokemonCard,
+              false,
+              true,
+              typeAdvantage
+            )}
+        </div>
+        `;
       }
     }
   }
@@ -100,17 +117,31 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.getItem("playerActivePokemonCard")
       );
 
-      if (botActivePokemonCard && playerActivePokemonCard) {
-        const typeAdvantage = getTypeAdvantageString(
-          botActivePokemonCard.type,
-          playerActivePokemonCard.type
-        );
+      if (battleState === "botSelecting") {
+        if (battleLog) {
+          battleLog.innerHTML = `<div class="battle-log-message">L'adversaire choisit une carte...</div>`;
+        }
+        return;
+      }
+
+      if (botActivePokemonCard) {
+        const typeAdvantage = playerActivePokemonCard
+          ? getTypeAdvantageString(
+              botActivePokemonCard.type,
+              playerActivePokemonCard.type
+            )
+          : "";
 
         botActivePokemon.innerHTML = `
-      <div class="pokemon-card type-${botActivePokemonCard.type}">
-          ${generateCardHTML(botActivePokemonCard, false, true, typeAdvantage)}
-      </div>
-      `;
+        <div class="pokemon-card type-${botActivePokemonCard.type}">
+            ${generateCardHTML(
+              botActivePokemonCard,
+              false,
+              true,
+              typeAdvantage
+            )}
+        </div>
+        `;
       }
     }
   }
