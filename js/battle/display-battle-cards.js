@@ -1,4 +1,5 @@
 import { getTypeAdvantageString } from "./card-type-advantage.js";
+import { generateCardHTML } from "./helper/generateCardHTML.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const playerCards = document.getElementById("playerCards");
@@ -14,46 +15,21 @@ document.addEventListener("DOMContentLoaded", () => {
     battleHandCards.forEach((pokemon) => {
       if (!pokemon.name) return;
 
+      const card = document.createElement("div");
+
       if (pokemon.eliminated) {
-        const card = document.createElement("div");
         card.className = `pokemon-card eliminated-card type-${pokemon.type}`;
         card.dataset.pokemonId = pokemon.id;
         card.id = `pokemon-card-${pokemon.id}`;
-
-        card.innerHTML = `
-          <div class="eliminated-overlay">KO</div>
-          <img src="${pokemon.image}" alt="${pokemon.name}">
-          <div class="card-body">
-            <h5 class="card-title">${pokemon.name}</h5>
-            <div class="card-type">${pokemon.type}</div>
-            <div class="stats">
-              <div class="stat hp">PV: 0</div>
-              <div class="stat attack">ATQ: ${pokemon.attack}</div>
-              <div class="stat defense">DEF: ${pokemon.defense}</div>
-            </div>
-          </div>
-        `;
-        playerCards.appendChild(card);
+        card.innerHTML = generateCardHTML(pokemon, true);
       } else {
-        const card = document.createElement("div");
         card.className = `pokemon-card type-${pokemon.type}`;
         card.dataset.pokemonId = pokemon.id;
         card.id = `pokemon-card-${pokemon.id}`;
-
-        card.innerHTML = `
-          <img src="${pokemon.image}" alt="${pokemon.name}">
-          <div class="card-body">
-            <h5 class="card-title">${pokemon.name}</h5>
-            <div class="card-type">${pokemon.type}</div>
-            <div class="stats">
-              <div class="stat hp">PV: ${pokemon.hp}</div>
-              <div class="stat attack">ATQ: ${pokemon.attack}</div>
-              <div class="stat defense">DEF: ${pokemon.defense}</div>
-            </div>
-          </div>
-        `;
-        playerCards.appendChild(card);
+        card.innerHTML = generateCardHTML(pokemon);
       }
+
+      playerCards.appendChild(card);
     });
     displayActivePokemonPlayer();
   }
@@ -74,20 +50,15 @@ document.addEventListener("DOMContentLoaded", () => {
         );
 
         playerActivePokemon.innerHTML = `
-        <div class="pokemon-card type-${playerActivePokemonCard.type}">
-            <img src="${playerActivePokemonCard.image}" alt="${playerActivePokemonCard.name}" class="battlePokemonImage">
-            <div class="card-body">
-              <h5 class="card-title">${playerActivePokemonCard.name}</h5>
-              <div class="card-type">${playerActivePokemonCard.type}</div>
-              
-              <div class="stats">
-                <div class="hp">PV: ${playerActivePokemonCard.hp}</div>
-                <div class="attack">ATQ: ${playerActivePokemonCard.attack} ${typeAdvantage}</div>
-                <div class="defense">DEF: ${playerActivePokemonCard.defense}</div>
-              </div>
-            </div>
-          </div>
-        `;
+      <div class="pokemon-card type-${playerActivePokemonCard.type}">
+          ${generateCardHTML(
+            playerActivePokemonCard,
+            false,
+            true,
+            typeAdvantage
+          )}
+      </div>
+      `;
       }
     }
   }
@@ -101,47 +72,21 @@ document.addEventListener("DOMContentLoaded", () => {
     battleBotCards.forEach((pokemon) => {
       if (!pokemon.name) return;
 
+      const card = document.createElement("div");
+
       if (pokemon.eliminated) {
-        const card = document.createElement("div");
         card.className = `pokemon-card eliminated-card type-${pokemon.type}`;
         card.dataset.pokemonId = pokemon.id;
         card.id = `pokemon-card-${pokemon.id}`;
-
-        card.innerHTML = `
-          <div class="eliminated-overlay">KO</div>
-          <img src="${pokemon.image}" alt="${pokemon.name}">
-          <div class="card-body">
-            <h5 class="card-title">${pokemon.name}</h5>
-            <div class="card-type">${pokemon.type}</div>
-            <div class="stats">
-              <div class="stat hp">PV: 0</div>
-              <div class="stat attack">ATQ: ${pokemon.attack}</div>
-              <div class="stat defense">DEF: ${pokemon.defense}</div>
-            </div>
-          </div>
-        `;
-        botCards.appendChild(card);
+        card.innerHTML = generateCardHTML(pokemon, true);
       } else {
-        // Regular non-eliminated card
-        const card = document.createElement("div");
         card.className = `pokemon-card type-${pokemon.type}`;
         card.dataset.pokemonId = pokemon.id;
         card.id = `pokemon-card-${pokemon.id}`;
-
-        card.innerHTML = `
-          <img src="${pokemon.image}" alt="${pokemon.name}">
-          <div class="card-body">
-            <h5 class="card-title">${pokemon.name}</h5>
-            <div class="card-type">${pokemon.type}</div>
-            <div class="stats">
-              <div class="stat hp">PV: ${pokemon.hp}</div>
-              <div class="stat attack">ATQ: ${pokemon.attack}</div>
-              <div class="stat defense">DEF: ${pokemon.defense}</div>
-            </div>
-          </div>
-        `;
-        botCards.appendChild(card);
+        card.innerHTML = generateCardHTML(pokemon);
       }
+
+      botCards.appendChild(card);
     });
     displayActivePokemonBot();
   }
@@ -160,21 +105,12 @@ document.addEventListener("DOMContentLoaded", () => {
           botActivePokemonCard.type,
           playerActivePokemonCard.type
         );
+
         botActivePokemon.innerHTML = `
-        <div class="pokemon-card type-${botActivePokemonCard.type}">
-            <img src="${botActivePokemonCard.image}" alt="${botActivePokemonCard.name}" class="battlePokemonImage">
-            <div class="card-body">
-              <h5 class="card-title">${botActivePokemonCard.name}</h5>
-              <div class="card-type">${botActivePokemonCard.type}</div>
-              
-              <div class="stats">
-                <div class="hp">PV: ${botActivePokemonCard.hp}</div>
-                <div class="attack">ATQ: ${botActivePokemonCard.attack}  ${typeAdvantage}</div>
-                <div class="defense">DEF: ${botActivePokemonCard.defense}</div>
-              </div>
-            </div>
-          </div>
-        `;
+      <div class="pokemon-card type-${botActivePokemonCard.type}">
+          ${generateCardHTML(botActivePokemonCard, false, true, typeAdvantage)}
+      </div>
+      `;
       }
     }
   }

@@ -1,3 +1,5 @@
+import { generateCardHTML } from "./helper/generateCardHTML.js";
+
 export function checkForEliminations() {
   const battleLog = document.getElementById("battleLog");
 
@@ -72,19 +74,7 @@ function addEliminatedCardToHand(pokemon) {
   card.dataset.pokemonId = pokemon.id;
   card.id = `pokemon-card-${pokemon.id}`;
 
-  card.innerHTML = `
-    <div class="eliminated-overlay">KO</div>
-    <img src="${pokemon.image}" alt="${pokemon.name}">
-    <div class="card-body">
-      <h5 class="card-title">${pokemon.name}</h5>
-      <div class="card-type">${pokemon.type}</div>
-      <div class="stats">
-        <div class="stat hp">PV: 0</div>
-        <div class="stat attack">ATQ: ${pokemon.attack}</div>
-        <div class="stat defense">DEF: ${pokemon.defense}</div>
-      </div>
-    </div>
-  `;
+  card.innerHTML = generateCardHTML(pokemon, true);
 
   return card;
 }
