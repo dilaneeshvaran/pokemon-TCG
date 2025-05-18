@@ -491,3 +491,55 @@
 .card-eliminated {
   animation: eliminateAnimation 1s forwards;
 }
+
+.active-card-dropzone {
+  border: 2px dashed #ffcb05;
+  background-color: rgba(255, 203, 5, 0.1);
+  transition: all 0.3s ease;
+}
+
+.active-card-dropzone.dragover {
+  background-color: rgba(255, 203, 5, 0.3);
+  transform: scale(1.05);
+}
+
+.selectable-card {
+  cursor: grab;
+  transition: transform 0.2s ease;
+}
+
+.selectable-card:hover {
+  transform: translateY(-5px) !important;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2) !important;
+}
+
+.winner-message {
+  color: #008000;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.loser-message {
+  color: #cc0000;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+@keyframes cardUpdate {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(255, 203, 5, 0.8);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.card-updated {
+  animation: cardUpdate 1s ease-in-out;
+}

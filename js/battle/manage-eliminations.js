@@ -1,4 +1,5 @@
 import { generateCardHTML } from "./helper/generateCardHTML.js";
+import { selectNewActivePokemon } from "./select-new-active-card.js";
 
 export function checkForEliminations() {
   const battleLog = document.getElementById("battleLog");
@@ -77,4 +78,21 @@ function addEliminatedCardToHand(pokemon) {
   card.innerHTML = generateCardHTML(pokemon, true);
 
   return card;
+}
+
+export function declareWinner(winner) {
+  const battleLog = document.getElementById("battleLog");
+  const battleActions = document.querySelector(".battle-actions");
+
+  if (battleActions) {
+    battleActions.style.display = "none";
+  }
+
+  if (battleLog) {
+    if (winner === "player") {
+      battleLog.innerHTML = `<div class="battle-log-message winner-message">Vous avez gagné le combat!</div>`;
+    } else {
+      battleLog.innerHTML = `<div class="battle-log-message loser-message">Vous avez perdu le combat!</div>`;
+    }
+  }
 }
