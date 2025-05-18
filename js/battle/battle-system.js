@@ -1,4 +1,4 @@
-import { drawPack } from "./pokemon-api.js";
+import { drawPack } from "../pokemon-api.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const battleBtn = document.getElementById("battleBtn");
