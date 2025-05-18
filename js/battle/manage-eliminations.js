@@ -1,4 +1,6 @@
 export function checkForEliminations() {
+  const battleLog = document.getElementById("battleLog");
+
   const playerActivePokemonCard = JSON.parse(
     localStorage.getItem("playerActivePokemonCard")
   );
@@ -26,18 +28,28 @@ export function checkForEliminations() {
 export function eliminateActivePokemon(side) {
   const activePokemonKey =
     side === "player" ? "playerActivePokemonCard" : "botActivePokemonCard";
-  const cardsKey = side === "player" ? "battleHandCards" : "battleBotCards";
+  const cardsLocalStorageKey =
+    side === "player" ? "battleHandCards" : "battleBotCards";
 
   const activePokemon = JSON.parse(localStorage.getItem(activePokemonKey));
-  const cards = JSON.parse(localStorage.getItem(cardsKey)) || [];
+  const cards = JSON.parse(localStorage.getItem(cardsLocalStorageKey)) || [];
 
   if (!activePokemon) return;
 
   activePokemon.eliminated = true;
-
+  activePokemon.hp = 0;
   cards.push(activePokemon);
 
-  localStorage.setItem(cardsKey, JSON.stringify(cards));
+  localStorage.setItem(cardsLocalStorageKey, JSON.stringify(cards));
+
+  localStorage.removeItem(activePokemonKey);
+
+  const activePokemonContainer = document.getElementById(
+    side === "player" ? "playerActivePokemon" : "botActivePokemon"
+  );
+  if (activePokemonContainer) {
+    activePokemonContainer.innerHTML = "";
+  }
 
   if (side === "player") {
     const playerCardsContainer = document.getElementById("playerCards");
@@ -51,15 +63,6 @@ export function eliminateActivePokemon(side) {
       const card = addEliminatedCardToHand(activePokemon);
       botCardsContainer.appendChild(card);
     }
-  }
-
-  localStorage.removeItem(activePokemonKey);
-
-  const activePokemonContainer = document.getElementById(
-    side === "player" ? "playerActivePokemon" : "botActivePokemon"
-  );
-  if (activePokemonContainer) {
-    activePokemonContainer.innerHTML = "";
   }
 }
 

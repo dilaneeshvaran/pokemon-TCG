@@ -71,6 +71,9 @@ export function processBattleActions(playerAction, botAction) {
     battleMessage = "Les deux joueurs se défendent. Rien ne se passe!";
   }
 
+  if (playerActivePokemonCard.hp < 0) playerActivePokemonCard.hp = 0;
+  if (botActivePokemonCard.hp < 0) botActivePokemonCard.hp = 0;
+
   //enregistrer les nouveau stats de la carte
   localStorage.setItem(
     "playerActivePokemonCard",
@@ -82,6 +85,8 @@ export function processBattleActions(playerAction, botAction) {
   );
 
   //affiche les resultats
+  const battleLog = document.getElementById("battleLog");
+
   if (battleLog) {
     battleLog.innerHTML = `<div class="battle-log-message">${battleMessage}</div>`;
   }
