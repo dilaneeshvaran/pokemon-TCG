@@ -423,3 +423,22 @@
     opacity: 1;
   }
 }
+
+@keyframes hpUpdate {
+  0% {
+    color: inherit;
+    font-weight: normal;
+  }
+  50% {
+    color: #ff5555;
+    font-weight: bold;
+  }
+  100% {
+    color: inherit;
+    font-weight: normal;
+  }
+}
+
+.hp-updated {
+  animation: hpUpdate 1s ease-in-out;
+}

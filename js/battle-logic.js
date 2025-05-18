@@ -3,6 +3,7 @@ import {
   displayPlayerActionResult,
   displayBotActionResult,
 } from "./display-battle-actions.js";
+import { updatePokemonHP } from "./update-battle-cards.js";
 
 export function processBattleActions(playerAction, botAction) {
   const playerActivePokemonCard = JSON.parse(
@@ -86,12 +87,14 @@ export function processBattleActions(playerAction, botAction) {
 
   setTimeout(() => {
     if (playerDamageTaken > 0) {
+      updatePokemonHP("player");
       displayPlayerActionResult(`-${playerDamageTaken} PV`);
     } else if (botDamageTaken === 0 && botAction === "attack") {
       displayPlayerActionResult("Bloqué!");
     }
 
     if (botDamageTaken > 0) {
+      updatePokemonHP("bot");
       displayBotActionResult(`-${botDamageTaken} PV`);
     } else if (playerDamageTaken === 0 && playerAction === "attack") {
       displayBotActionResult("Bloqué!");
