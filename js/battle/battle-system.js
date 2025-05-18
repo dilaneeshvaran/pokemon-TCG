@@ -4,11 +4,12 @@ import { selectNewActivePokemon } from "./select-new-active-card.js";
 document.addEventListener("DOMContentLoaded", () => {
   const battleBtn = document.getElementById("battleBtn");
   const exitBattleBtn = document.getElementById("exitBattleBtn");
-
   checkAndRestoreBattleState();
 
   if (battleBtn) {
     battleBtn.addEventListener("click", () => {
+      localStorage.removeItem("battleState");
+
       const handCards = JSON.parse(localStorage.getItem("handCards")) || [];
       const botCards = drawPack();
 
@@ -16,8 +17,6 @@ document.addEventListener("DOMContentLoaded", () => {
       botCards.splice(randomIndex, 1);
 
       if (handCards.length > 0 && botCards.length > 0) {
-        localStorage.removeItem("battleState");
-
         localStorage.setItem(
           "playerActivePokemonCard",
           JSON.stringify(handCards[0])
@@ -62,10 +61,10 @@ document.addEventListener("DOMContentLoaded", () => {
     if (battleHandCards && battleBotCards) {
       if (!playerActivePokemonCard && botActivePokemonCard) {
         localStorage.setItem("battleState", "playerSelecting");
-        setTimeout(() => selectNewActivePokemon("player"), 1000);
+        selectNewActivePokemon("player");
       } else if (playerActivePokemonCard && !botActivePokemonCard) {
         localStorage.setItem("battleState", "botSelecting");
-        setTimeout(() => selectNewActivePokemon("bot"), 1000);
+        selectNewActivePokemon("bot");
       }
     }
   }

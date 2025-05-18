@@ -51,9 +51,6 @@ document.addEventListener("DOMContentLoaded", () => {
       );
 
       if (battleState === "playerSelecting") {
-        if (battleLog) {
-          battleLog.innerHTML = `<div class="battle-log-message">Choisissez une nouvelle carte Pokémon!</div>`;
-        }
         playerActivePokemon.classList.add("active-card-dropzone");
         return;
       }

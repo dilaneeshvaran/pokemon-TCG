@@ -3,6 +3,8 @@ import {
   displayPlayerAction,
 } from "./display-battle-actions.js";
 
+import { updateBattleLog, MESSAGES } from "./helper/send-battle-logs.js";
+
 import { processBattleActions } from "./battle-logic.js";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -24,10 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     displayPlayerAction(playerAction);
-
-    if (battleLog) {
-      battleLog.innerHTML = `<div class="battle-log-message">Tour de l'adversaire...</div>`;
-    }
+    updateBattleLog(MESSAGES.OPPONENT_TURN);
 
     const delayInSeconds = Math.floor(Math.random() * 3) + 2;
     await new Promise((resolve) => setTimeout(resolve, delayInSeconds * 1000));
@@ -50,12 +49,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     setTimeout(() => {
-      if (battleActions) {
-        battleActions.style.display = "flex";
-      }
-
-      if (battleLog) {
-        battleLog.innerHTML = "Votre tour !";
+      const playerActivePokemonCard = JSON.parse(
+        localStorage.getItem("playerActivePokemonCard")
+      );
+      if (playerActivePokemonCard) {
+        if (battleActions) {
+          battleActions.style.display = "flex";
+        }
+        updateBattleLog(MESSAGES.YOUR_TURN);
+      } else {
+        localStorage.setItem("battleState", "botSelecting");
       }
     }, 1000);
   }
@@ -74,7 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
         message = "Les deux joueurs se défendent!";
       }
 
-      battleLog.innerHTML = `<div class="battle-log-message">${message}</div>`;
+      updateBattleLog(message);
     }
   }
 });

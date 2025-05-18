@@ -5,6 +5,8 @@ import {
   updatePlayerActivePokemon,
 } from "./update-battle-cards.js";
 
+import { updateBattleLog, MESSAGES } from "./helper/send-battle-logs.js";
+
 export function selectNewActivePokemon(side) {
   if (side === "bot") {
     selectRandomBotCard();
@@ -49,9 +51,13 @@ function enablePlayerCardSelection() {
   const availableCards = battleHandCards.filter((card) => !card.eliminated);
 
   if (availableCards.length > 0) {
-    const battleLog = document.getElementById("battleLog");
-    if (battleLog) {
-      battleLog.innerHTML = `<div class="battle-log-message">Choisissez une nouvelle carte Pokémon!</div>`;
+    localStorage.setItem("battleState", "playerSelecting");
+
+    updateBattleLog(MESSAGES.CHOOSE_POKEMON);
+
+    const playerActivePokemon = document.getElementById("playerActivePokemon");
+    if (playerActivePokemon) {
+      playerActivePokemon.classList.add("active-card-dropzone");
     }
 
     enableDragForPlayerCards();
@@ -117,18 +123,7 @@ function handleCardDrop(e) {
       JSON.stringify(selectedCard)
     );
 
-    const battleActions = document.querySelector(".battle-actions");
-    if (battleActions) {
-      battleActions.style.display = "flex";
-    }
-
-    const battleLog = document.getElementById("battleLog");
-    if (battleLog) {
-      battleLog.innerHTML = `<div class="battle-log-message">${selectedCard.name}, a été choisis!</div>`;
-      setTimeout(() => {
-        battleLog.innerHTML = `<div class="battle-log-message">Votre tour!</div>`;
-      }, 2000);
-    }
+    updateBattleLog(`${selectedCard.name}, a été choisis!`);
 
     playerActivePokemon.removeEventListener("dragover", () => {});
     playerActivePokemon.removeEventListener("dragleave", () => {});
@@ -137,5 +132,20 @@ function handleCardDrop(e) {
     updatePlayerActivePokemon(selectedCard);
 
     removeCardFromHand(cardId);
+
+    setTimeout(() => {
+      const playerActivePokemonCard = JSON.parse(
+        localStorage.getItem("playerActivePokemonCard")
+      );
+      if (playerActivePokemonCard) {
+        localStorage.removeItem("battleState");
+        const battleActions = document.querySelector(".battle-actions");
+
+        if (battleActions) {
+          battleActions.style.display = "flex";
+        }
+        updateBattleLog(MESSAGES.YOUR_TURN);
+      }
+    }, 1000);
   }
 }
