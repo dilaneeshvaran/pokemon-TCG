@@ -9,6 +9,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const defendBtn = document.getElementById("defendBtn");
   const battleLog = document.getElementById("battleLog");
   const battleActions = document.querySelector(".battle-actions");
+  const playerSelectedAction = document.getElementById("playerSelectedAction");
+  const botSelectedAction = document.getElementById("botSelectedAction");
 
   if (attackBtn && defendBtn) {
     attackBtn.addEventListener("click", () => handlePlayerAction("attack"));
@@ -33,8 +35,17 @@ document.addEventListener("DOMContentLoaded", () => {
     displayBotAction(botChoice);
 
     processBattleLog(playerAction, botChoice);
+    processBattleActions();
 
     setTimeout(() => {
+      if (playerSelectedAction) {
+        playerSelectedAction.innerHTML = "";
+      }
+
+      if (botSelectedAction) {
+        botSelectedAction.innerHTML = "";
+      }
+
       if (battleActions) {
         battleActions.style.display = "flex";
       }
@@ -61,5 +72,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
       battleLog.innerHTML = `<div class="battle-log-message">${message}</div>`;
     }
+  }
+
+  function processBattleActions() {
+    const playerActivePokemonCard = JSON.parse(
+      localStorage.getItem("playerActivePokemonCard")
+    );
+    const botActivePokemonCard = JSON.parse(
+      localStorage.getItem("botActivePokemonCard")
+    );
   }
 });
