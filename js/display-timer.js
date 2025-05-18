@@ -17,7 +17,9 @@ function loadTimerState() {
 
     if (remainingTimeInMs > 0) {
       totalTimeInSeconds = Math.ceil(remainingTimeInMs / 1000);
-      document.getElementById("drawNewCardsBtn").disabled = true;
+      // document.getElementById("drawNewCardsBtn").disabled = true;
+      document.getElementById("drawNewCardsBtn").id = "drawNewCardsBtnDisabled";
+      
 
       updateCountDown();
       timerInterval = setInterval(updateCountDown, 1000);
@@ -25,12 +27,9 @@ function loadTimerState() {
       totalTimeInSeconds = 0;
       timerDisplay.textContent =
         "Vous pouvez tirer un nouveau packet maintenant !";
-      document.getElementById("drawNewCardsBtn").disabled = false;
+      // document.getElementById("drawNewCardsBtn").disabled = false;
+      document.getElementById("drawNewCardsBtnDisabled").id = "drawNewCardsBtn";
     }
-  } else {
-    timerDisplay.textContent =
-      "Vous pouvez tirer un nouveau packet maintenant !";
-    document.getElementById("drawNewCardsBtn").disabled = false;
   }
 }
 
@@ -51,13 +50,15 @@ export function updateCountDown() {
     clearInterval(timerInterval);
     timerDisplay.textContent =
       "Vous pouvez tirer un nouveau packet maintenant !";
-    document.getElementById("drawNewCardsBtn").disabled = false;
+    // document.getElementById("drawNewCardsBtn").disabled = false;
+    document.getElementById("drawNewCardsBtnDisabled").id = "drawNewCardsBtn";
     localStorage.removeItem("timerState");
   }
 }
 
 export function countDown() {
-  document.getElementById("drawNewCardsBtn").disabled = true;
+  // document.getElementById("drawNewCardsBtn").disabled = true;
+  document.getElementById("drawNewCardsBtn").id = "drawNewCardsBtnDisabled";
 
   totalTimeInSeconds = waitTimeInMinutes * 60;
 
@@ -70,3 +71,11 @@ export function countDown() {
 }
 
 document.addEventListener("DOMContentLoaded", loadTimerState);
+
+export function alertMessage(message) {
+  const popup = document.getElementById('cooldownPopup');
+  const popupMsg = document.getElementById('cooldownMessage');
+  
+  popupMsg.textContent = message;
+  popup.classList.remove('hidden');
+}

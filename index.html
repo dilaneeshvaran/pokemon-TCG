@@ -12,9 +12,11 @@
       <h1 class="page-title">Pokémon TCG</h1>
 
       <div class="action-area">
+        <!-- <div style="width: fit-content;" id="drawNewCardsBtnDiv"> -->
         <button id="drawNewCardsBtn">
           Tirer des cartes aléatoires (5 cartes)
         </button>
+        <!-- </div> -->
         <div id="timerDisplay"></div>
       </div>
 
@@ -54,6 +56,14 @@
         <div id="cardDetailsContent"></div>
       </div>
     </div>
+    <!-- popup attendre pour tirer nouveau booster -->
+    <div id="cooldownPopup" class="popup-overlay hidden">
+      <div class="popup-content">
+        <span id="closePopupBtn" class="popup-close">&times;</span>
+        <p id="cooldownMessage">⏳ Veuillez patienter avant de tirer un nouveau paquet.</p>
+      </div>
+    </div>
+
     <script type="module" src="js/manage-cards.js"></script>
     <script type="module" src="js/pokemon-api.js"></script>
     <script type="module" src="js/display-cards.js"></script>
