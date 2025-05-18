@@ -12,8 +12,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const randomIndex = Math.floor(Math.random() * botCards.length);
       botCards.splice(randomIndex, 1);
 
-      console.log(botCards);
-
       if (handCards.length > 0 && botCards.length > 0) {
         localStorage.setItem(
           "playerActivePokemonCard",

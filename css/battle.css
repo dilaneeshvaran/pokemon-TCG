@@ -276,3 +276,62 @@
   transform: none;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
+/* action badges */
+.player-selected-action,
+.bot-selected-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  margin: 0 10px;
+  margin: -100px;
+}
+
+.action-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+  animation: pop-in 0.3s ease-out;
+}
+
+.attack-badge {
+  background-color: #cc0000;
+  border-radius: 50%;
+}
+
+.defend-badge {
+  background-color: #3b4cca;
+  border-radius: 50%;
+}
+
+.action-icon {
+  font-size: 24px;
+  margin-bottom: 4px;
+}
+
+.action-text {
+  font-size: 12px;
+  text-align: center;
+}
+
+@keyframes pop-in {
+  0% {
+    transform: scale(0);
+  }
+  80% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
