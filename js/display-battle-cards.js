@@ -1,3 +1,5 @@
+import { getTypeAdvantageString } from "./card-type-advantage.js";
+
 document.addEventListener("DOMContentLoaded", () => {
   const playerCards = document.getElementById("playerCards");
   const playerActivePokemon = document.getElementById("playerActivePokemon");
@@ -39,8 +41,16 @@ document.addEventListener("DOMContentLoaded", () => {
       const playerActivePokemonCard = JSON.parse(
         localStorage.getItem("playerActivePokemonCard")
       );
+      const botActivePokemonCard = JSON.parse(
+        localStorage.getItem("botActivePokemonCard")
+      );
 
-      if (playerActivePokemonCard) {
+      if (playerActivePokemonCard && botActivePokemonCard) {
+        const typeAdvantage = getTypeAdvantageString(
+          playerActivePokemonCard.type,
+          botActivePokemonCard.type
+        );
+
         playerActivePokemon.innerHTML = `
         <div class="pokemon-card type-${playerActivePokemonCard.type}">
             <img src="${playerActivePokemonCard.image}" alt="${playerActivePokemonCard.name}" class="battlePokemonImage">
@@ -50,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
               
               <div class="stats">
                 <div class="hp">PV: ${playerActivePokemonCard.hp}</div>
-                <div class="attack">ATQ: ${playerActivePokemonCard.attack}</div>
+                <div class="attack">ATQ: ${playerActivePokemonCard.attack} ${typeAdvantage}</div>
                 <div class="defense">DEF: ${playerActivePokemonCard.defense}</div>
               </div>
             </div>
@@ -97,8 +107,15 @@ document.addEventListener("DOMContentLoaded", () => {
       const botActivePokemonCard = JSON.parse(
         localStorage.getItem("botActivePokemonCard")
       );
+      const playerActivePokemonCard = JSON.parse(
+        localStorage.getItem("playerActivePokemonCard")
+      );
 
-      if (botActivePokemonCard) {
+      if (botActivePokemonCard && playerActivePokemonCard) {
+        const typeAdvantage = getTypeAdvantageString(
+          botActivePokemonCard.type,
+          playerActivePokemonCard.type
+        );
         botActivePokemon.innerHTML = `
         <div class="pokemon-card type-${botActivePokemonCard.type}">
             <img src="${botActivePokemonCard.image}" alt="${botActivePokemonCard.name}" class="battlePokemonImage">
@@ -108,7 +125,7 @@ document.addEventListener("DOMContentLoaded", () => {
               
               <div class="stats">
                 <div class="hp">PV: ${botActivePokemonCard.hp}</div>
-                <div class="attack">ATQ: ${botActivePokemonCard.attack}</div>
+                <div class="attack">ATQ: ${botActivePokemonCard.attack}  ${typeAdvantage}</div>
                 <div class="defense">DEF: ${botActivePokemonCard.defense}</div>
               </div>
             </div>
