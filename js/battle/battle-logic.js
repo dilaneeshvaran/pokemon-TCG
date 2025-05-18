@@ -4,6 +4,7 @@ import {
   displayBotActionResult,
 } from "./display-battle-actions.js";
 import { updatePokemonHP } from "./update-battle-cards.js";
+import { checkForEliminations } from "./manage-eliminations.js";
 
 export function processBattleActions(playerAction, botAction) {
   const playerActivePokemonCard = JSON.parse(
@@ -100,4 +101,8 @@ export function processBattleActions(playerAction, botAction) {
       displayBotActionResult("Bloqué!");
     }
   }, 1000);
+
+  setTimeout(() => {
+    checkForEliminations();
+  }, 2000);
 }
