@@ -20,14 +20,14 @@ const typeAdvantages = {
 };
 
 export function getTypeAdvantageString(attackerType, defenderType) {
-  if (attackerType === defenderType) {
+  const attacker = attackerType.toLowerCase();
+  const defender = defenderType.toLowerCase();
+
+  if (attacker === defender) {
     return "";
   }
 
-  if (
-    typeAdvantages[attackerType] &&
-    typeAdvantages[attackerType].includes(defenderType)
-  ) {
+  if (typeAdvantages[attacker] && typeAdvantages[attacker].includes(defender)) {
     return `<span class="bonus-text">+30</span>`;
   }
 
@@ -35,14 +35,14 @@ export function getTypeAdvantageString(attackerType, defenderType) {
 }
 
 export function getTypeAdvantageInt(attackerType, defenderType) {
-  if (attackerType === defenderType) {
+  const attacker = attackerType.toLowerCase();
+  const defender = defenderType.toLowerCase();
+
+  if (attacker === defender) {
     return 0;
   }
 
-  if (
-    typeAdvantages[attackerType] &&
-    typeAdvantages[attackerType].includes(defenderType)
-  ) {
+  if (typeAdvantages[attacker] && typeAdvantages[attacker].includes(defender)) {
     return 30;
   }
 
