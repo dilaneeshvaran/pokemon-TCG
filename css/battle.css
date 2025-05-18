@@ -287,6 +287,7 @@
   height: 80px;
   margin: 0 10px;
   margin: -100px;
+  background-color: transparent;
 }
 
 .action-badge {
@@ -301,17 +302,19 @@
   color: white;
   font-weight: bold;
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
-  animation: pop-in 0.3s ease-out;
+  animation: pop-in 0.9s ease-out;
 }
 
 .attack-badge {
   background-color: #cc0000;
   border-radius: 50%;
+  animation: pop-in 0.5s ease-out;
 }
 
 .defend-badge {
   background-color: #3b4cca;
   border-radius: 50%;
+  animation: pop-in 0.5s ease-out;
 }
 
 .action-icon {
@@ -328,7 +331,7 @@
   0% {
     transform: scale(0);
   }
-  80% {
+  99% {
     transform: scale(1.1);
   }
   100% {

@@ -21,9 +21,6 @@ function displayPlayerAction(action) {
   if (playerSelectedAction) {
     playerSelectedAction.innerHTML = createActionBadge(action);
     playerSelectedAction.className = "player-selected-action";
-    playerSelectedAction.classList.add(
-      action === "attack" ? "attack-badge" : "defend-badge"
-    );
   }
 }
 
@@ -31,9 +28,6 @@ function displayBotAction(action) {
   if (botSelectedAction) {
     botSelectedAction.innerHTML = createActionBadge(action);
     botSelectedAction.className = "bot-selected-action";
-    botSelectedAction.classList.add(
-      action === "attack" ? "attack-badge" : "defend-badge"
-    );
   }
 }
 
