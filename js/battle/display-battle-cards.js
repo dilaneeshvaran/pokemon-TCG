@@ -1,5 +1,6 @@
 import { getTypeAdvantageString } from "./card-type-advantage.js";
 import { generateCardHTML } from "./helper/generateCardHTML.js";
+import { selectNewActivePokemon } from "./select-new-active-card.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const playerCards = document.getElementById("playerCards");
@@ -141,5 +142,8 @@ document.addEventListener("DOMContentLoaded", () => {
         `;
       }
     }
+  }
+  if (localStorage.getItem("battleState") === "playerSelecting") {
+    selectNewActivePokemon("player");
   }
 });
