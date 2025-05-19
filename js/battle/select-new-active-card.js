@@ -17,8 +17,6 @@ export function selectNewActivePokemon(side) {
 
 //bot
 function selectRandomBotCard() {
-  const battleState = localStorage.getItem("battleState");
-
   const battleBotCards =
     JSON.parse(localStorage.getItem("battleBotCards")) || [];
   const availableCards = battleBotCards.filter((card) => !card.eliminated);
@@ -33,14 +31,14 @@ function selectRandomBotCard() {
     localStorage.setItem("battleBotCards", JSON.stringify(updatedBotCards));
     localStorage.setItem("botActivePokemonCard", JSON.stringify(selectedCard));
 
-    setTimeout(() => {
-      const battleLog = document.getElementById("battleLog");
-      if (battleLog) {
-        battleLog.innerHTML = `<div class="battle-log-message">L'adversaire envoie ${selectedCard.name} au combat!</div>`;
-      }
+    const battleLog = document.getElementById("battleLog");
+    if (battleLog) {
+      battleLog.innerHTML = `<div class="battle-log-message">L'adversaire envoie ${selectedCard.name} au combat!</div>`;
+    }
 
+    setTimeout(() => {
       updateBotActivePokemon(selectedCard);
-    }, 1000);
+    }, 3000);
   } else {
     declareWinner("player");
   }
@@ -69,8 +67,6 @@ function enablePlayerCardSelection() {
 }
 
 function enableDragForPlayerCards() {
-  const battleState = localStorage.getItem("battleState");
-
   const playerCards = document.querySelectorAll(
     "#playerCards .pokemon-card:not(.eliminated-card)"
   );
