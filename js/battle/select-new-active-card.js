@@ -18,9 +18,7 @@ export function selectNewActivePokemon(side) {
 //bot
 function selectRandomBotCard() {
   const battleState = localStorage.getItem("battleState");
-  if (battleState === "finished") {
-    return;
-  }
+
   const battleBotCards =
     JSON.parse(localStorage.getItem("battleBotCards")) || [];
   const availableCards = battleBotCards.filter((card) => !card.eliminated);
@@ -50,10 +48,6 @@ function selectRandomBotCard() {
 
 //player
 function enablePlayerCardSelection() {
-  const battleState = localStorage.getItem("battleState");
-  if (battleState === "finished") {
-    return;
-  }
   const battleHandCards =
     JSON.parse(localStorage.getItem("battleHandCards")) || [];
   const availableCards = battleHandCards.filter((card) => !card.eliminated);
@@ -75,6 +69,8 @@ function enablePlayerCardSelection() {
 }
 
 function enableDragForPlayerCards() {
+  const battleState = localStorage.getItem("battleState");
+
   const playerCards = document.querySelectorAll(
     "#playerCards .pokemon-card:not(.eliminated-card)"
   );

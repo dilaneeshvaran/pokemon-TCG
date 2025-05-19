@@ -56,10 +56,13 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.getItem("playerActivePokemonCard")
       );
       if (playerActivePokemonCard) {
-        if (battleActions) {
-          battleActions.style.display = "flex";
+        if (localStorage.getItem("battleState") !== "finished") {
+          if (battleActions) {
+            battleActions.style.display = "flex";
+          }
+
+          updateBattleLog(MESSAGES.YOUR_TURN);
         }
-        updateBattleLog(MESSAGES.YOUR_TURN);
       } else {
         localStorage.setItem("battleState", "botSelecting");
       }

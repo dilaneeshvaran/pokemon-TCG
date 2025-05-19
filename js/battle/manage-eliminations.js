@@ -89,11 +89,13 @@ export function eliminateActivePokemon(side) {
 
   localStorage.removeItem(activePokemonKey);
 
-  const activePokemonContainer = document.getElementById(
-    side === "player" ? "playerActivePokemon" : "botActivePokemon"
-  );
-  if (activePokemonContainer) {
-    activePokemonContainer.innerHTML = "";
+  if (localStorage.getItem("battleState") !== "finished") {
+    const activePokemonContainer = document.getElementById(
+      side === "player" ? "playerActivePokemon" : "botActivePokemon"
+    );
+    if (activePokemonContainer) {
+      activePokemonContainer.innerHTML = "";
+    }
   }
 
   if (side === "player") {
