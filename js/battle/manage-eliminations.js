@@ -126,6 +126,8 @@ export function declareWinner(winner) {
   const battleLog = document.getElementById("battleLog");
   const battleActions = document.querySelector(".battle-actions");
 
+  /*   const battleActions = document.querySelector(".battle-actions");
+   */
   /*   if (battleActions) {
     battleActions.style.display = "none";
   } */
@@ -137,5 +139,8 @@ export function declareWinner(winner) {
       battleLog.innerHTML = `<div class="battle-log-message loser-message">Vous avez perdu le combat!</div>`;
     }
   }
-  rateTheOpponent();
+  setTimeout(() => {
+    rateTheOpponent();
+    battleActions.style.display = "flex";
+  }, 5000);
 }
