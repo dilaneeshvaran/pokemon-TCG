@@ -2,6 +2,7 @@ export function rateTheOpponent() {
   const attackBtn = document.getElementById("attackBtn");
   const defendBtn = document.getElementById("defendBtn");
   const battleLog = document.getElementById("battleLog");
+  const battleActions = document.querySelector(".battle-actions");
 
   if (battleLog) {
     battleLog.innerHTML = `
@@ -20,15 +21,18 @@ export function rateTheOpponent() {
 
   if (attackBtn) {
     attackBtn.textContent = "Valider et retourner à l'accueil";
+    attackBtn.classList.add("rating-submit-btn");
     attackBtn.removeEventListener("click", window.handlePlayerAction);
     attackBtn.addEventListener("click", submitRatingAndReturn);
   }
 
   if (defendBtn) {
     defendBtn.textContent = "Ignorer et retour à l'accueil";
+    defendBtn.classList.add("rating-ignore-btn");
     defendBtn.removeEventListener("click", window.handlePlayerAction);
     defendBtn.addEventListener("click", ignoreRatingAndReturn);
   }
+  battleActions.style.display = "flex";
 
   initializeRating();
 }

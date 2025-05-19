@@ -589,3 +589,27 @@
 .stars-container .star:hover ~ .star {
   color: #ccc;
 }
+
+.rating-submit-btn {
+  color: white;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background-color: #3bca47;
+  font-size: 20px;
+}
+
+.rating-submit-btn:hover {
+  background-color: #25902e;
+}
+
+.rating-ignore-btn {
+  color: white;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background-color: #5e5e5e;
+  font-size: 20px;
+}
+
+.rating-ignore-btn:hover {
+  background-color: #7a7a7a;
+}

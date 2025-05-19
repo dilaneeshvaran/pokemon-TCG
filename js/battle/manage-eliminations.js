@@ -126,11 +126,11 @@ export function declareWinner(winner) {
   const battleLog = document.getElementById("battleLog");
   const battleActions = document.querySelector(".battle-actions");
 
-  /*   const battleActions = document.querySelector(".battle-actions");
-   */
-  /*   if (battleActions) {
+  if (battleActions) {
     battleActions.style.display = "none";
-  } */
+  }
+
+  localStorage.setItem("battleState", "finished");
 
   if (battleLog) {
     if (winner === "player") {
@@ -141,6 +141,5 @@ export function declareWinner(winner) {
   }
   setTimeout(() => {
     rateTheOpponent();
-    battleActions.style.display = "flex";
   }, 5000);
 }
