@@ -12,11 +12,19 @@ export function checkForEliminations() {
     localStorage.getItem("botActivePokemonCard")
   );
 
-  lastCardsEliminationCheck(
-    playerActivePokemonCard,
-    botActivePokemonCard,
-    battleLog
-  );
+  if (
+    playerActivePokemonCard &&
+    botActivePokemonCard &&
+    playerActivePokemonCard.hp <= 0 &&
+    botActivePokemonCard.hp <= 0
+  ) {
+    lastCardsEliminationCheck(
+      playerActivePokemonCard,
+      botActivePokemonCard,
+      battleLog
+    );
+    return;
+  }
 
   if (playerActivePokemonCard && playerActivePokemonCard.hp <= 0) {
     if (battleLog) {
@@ -66,6 +74,16 @@ function lastCardsEliminationCheck(
       eliminateActivePokemon("player");
       eliminateActivePokemon("bot");
       return;
+    } else {
+      if (battleLog) {
+        battleLog.innerHTML = `<div class="battle-log-message">Les 2 Pokémons sont en PLS ! </div>`;
+      }
+      eliminateActivePokemon("player");
+      eliminateActivePokemon("bot");
+      setTimeout(() => {
+        selectNewActivePokemon("player");
+        selectNewActivePokemon("bot");
+      }, 1000);
     }
   }
 }

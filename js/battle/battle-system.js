@@ -4,6 +4,7 @@ import { selectNewActivePokemon } from "./select-new-active-card.js";
 document.addEventListener("DOMContentLoaded", () => {
   const battleBtn = document.getElementById("battleBtn");
   const exitBattleBtn = document.getElementById("exitBattleBtn");
+
   checkAndRestoreBattleState();
 
   if (battleBtn) {

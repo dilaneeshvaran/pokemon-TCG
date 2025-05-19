@@ -38,7 +38,7 @@ function selectRandomBotCard() {
 
     setTimeout(() => {
       updateBotActivePokemon(selectedCard);
-    }, 3000);
+    }, 1000);
   } else {
     declareWinner("player");
   }
