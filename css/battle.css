@@ -543,3 +543,49 @@
 .card-updated {
   animation: cardUpdate 1s ease-in-out;
 }
+
+.rating-system {
+  text-align: center;
+  margin: 30px auto;
+  max-width: 500px;
+  padding: 20px;
+  border-radius: 10px;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.rating-title {
+  font-size: 22px;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.stars-container {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  font-size: 36px;
+  margin: 10px 0 20px;
+}
+
+.star {
+  color: #ccc;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.star:hover,
+.star.selected {
+  color: #ffcb05;
+}
+
+.star:hover ~ .star {
+  color: #ccc;
+}
+
+.stars-container:hover .star {
+  color: #ffcb05;
+}
+
+.stars-container .star:hover ~ .star {
+  color: #ccc;
+}

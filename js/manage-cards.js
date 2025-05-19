@@ -13,8 +13,6 @@ if (savedDeckCards) {
 const savedHandCards = JSON.parse(localStorage.getItem("handCards"));
 if (savedHandCards) {
   handCards = savedHandCards;
-} else {
-  localStorage.setItem("handCards", JSON.stringify(handCards));
 }
 
 const drawNewCardsBtn = document.getElementById("drawNewCardsBtn");

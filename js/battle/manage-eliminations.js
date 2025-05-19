@@ -1,5 +1,6 @@
 import { generateCardHTML } from "./helper/generateCardHTML.js";
 import { selectNewActivePokemon } from "./select-new-active-card.js";
+import { rateTheOpponent } from "./rate-battle-opponent.js";
 
 export function checkForEliminations() {
   const battleLog = document.getElementById("battleLog");
@@ -9,6 +10,12 @@ export function checkForEliminations() {
   );
   const botActivePokemonCard = JSON.parse(
     localStorage.getItem("botActivePokemonCard")
+  );
+
+  lastCardsEliminationCheck(
+    playerActivePokemonCard,
+    botActivePokemonCard,
+    battleLog
   );
 
   if (playerActivePokemonCard && playerActivePokemonCard.hp <= 0) {
@@ -25,6 +32,41 @@ export function checkForEliminations() {
     }
     eliminateActivePokemon("bot");
     selectNewActivePokemon("bot");
+  }
+}
+
+function lastCardsEliminationCheck(
+  playerActivePokemonCard,
+  botActivePokemonCard,
+  battleLog
+) {
+  if (
+    playerActivePokemonCard &&
+    playerActivePokemonCard.hp <= 0 &&
+    botActivePokemonCard &&
+    botActivePokemonCard.hp <= 0
+  ) {
+    const playerHand = (
+      JSON.parse(localStorage.getItem("battleHandCards")) || []
+    ).filter((c) => !c.eliminated);
+    const botHand = (
+      JSON.parse(localStorage.getItem("battleBotCards")) || []
+    ).filter((c) => !c.eliminated);
+
+    if (playerHand.length === 0 && botHand.length === 0) {
+      if (playerActivePokemonCard.attack > botActivePokemonCard.attack) {
+        declareWinner("player");
+      } else if (playerActivePokemonCard.attack < botActivePokemonCard.attack) {
+        declareWinner("bot");
+      } else {
+        if (battleLog) {
+          battleLog.innerHTML = `<div class="battle-log-message">Match nul ! </div>`;
+        }
+      }
+      eliminateActivePokemon("player");
+      eliminateActivePokemon("bot");
+      return;
+    }
   }
 }
 
@@ -84,9 +126,9 @@ export function declareWinner(winner) {
   const battleLog = document.getElementById("battleLog");
   const battleActions = document.querySelector(".battle-actions");
 
-  if (battleActions) {
+  /*   if (battleActions) {
     battleActions.style.display = "none";
-  }
+  } */
 
   if (battleLog) {
     if (winner === "player") {
@@ -95,4 +137,5 @@ export function declareWinner(winner) {
       battleLog.innerHTML = `<div class="battle-log-message loser-message">Vous avez perdu le combat!</div>`;
     }
   }
+  rateTheOpponent();
 }

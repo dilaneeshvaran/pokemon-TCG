@@ -20,6 +20,9 @@ document.addEventListener("DOMContentLoaded", () => {
     defendBtn.addEventListener("click", () => handlePlayerAction("defend"));
   }
 
+  //exporter pour l'acces global de la fonction handlePlayerAction
+  window.handlePlayerAction = handlePlayerAction;
+
   async function handlePlayerAction(playerAction) {
     if (battleActions) {
       battleActions.style.display = "none";
