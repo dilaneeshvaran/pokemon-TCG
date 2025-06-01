@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pokémon</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="page-title">Catalog</h1>
+
+        <div class="card-section">
+          <div class="section-header">
+            <h3>Votre Pioche</h3>
+          </div>
+          <div class="section-body">
+            <div id="deckContainer" class="card-container"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="cardDetailsModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="card-details-title" id="cardDetailsTitle">
+            Détails de la carte
+          </h5>
+          <button class="card-details-btn-close" aria-label="Fermer"></button>
+        </div>
+        <div id="cardDetailsContent"></div>
+      </div>
+    </div>
+    <!-- popup attendre pour tirer nouveau booster -->
+    <div id="cooldownPopup" class="popup-overlay hidden">
+      <div class="popup-content">
+        <span id="closePopupBtn" class="popup-close">&times;</span>
+        <p id="cooldownMessage">⏳ Veuillez patienter avant de tirer un nouveau paquet.</p>
+      </div>
+    </div>
+
+    <script type="module" src="js/manage-cards.js"></script>
+    <script type="module" src="js/pokemon-api.js"></script>
+    <script type="module" src="js/display-cards.js"></script>
+    <script type="module" src="js/drag-card-to-hand.js"></script>
+    <script type="module" src="js/display-timer.js"></script>
+    <script type="module" src="js/display-card-details.js"></script>
+    <script type="module" src="js/battle/battle-system.js"></script>
+  </body>
+</html>
