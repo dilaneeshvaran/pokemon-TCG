@@ -9,7 +9,20 @@
   </head>
   <body>
     <div class="container">
-      <h1 class="page-title">Catalog</h1>
+        <h1 class="page-title">Catalog</h1>
+        <div class="filters">
+            <input type="text" id="searchInput" placeholder="Rechercher un Pokémon par nom..." />
+            <select id="typeFilter">
+                <option value="">Tous les types</option>
+                <option value="fire">Feu</option>
+                <option value="water">Eau</option>
+                <option value="bug">Insecte</option>
+                <option value="electric">Électrik</option>
+                <option value="poison">Poison</option>
+                <option value="ice">Glace</option>
+                <option value="grass">Terre</option>
+            </select>
+        </div>
 
         <div class="card-section">
           <div class="section-header">
@@ -44,9 +57,7 @@
     <script type="module" src="js/manage-cards.js"></script>
     <script type="module" src="js/pokemon-api.js"></script>
     <script type="module" src="js/display-cards.js"></script>
-    <script type="module" src="js/drag-card-to-hand.js"></script>
-    <script type="module" src="js/display-timer.js"></script>
     <script type="module" src="js/display-card-details.js"></script>
-    <script type="module" src="js/battle/battle-system.js"></script>
+    <script type="module" src="js/catalog/catalog.js"></script>
   </body>
 </html>
