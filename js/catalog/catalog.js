@@ -11,7 +11,7 @@ export function displayDeckCardsCatalog(filterName = "", filterType = "") {
     return;
   }
 
-  // ✅ Générer les types dynamiquement
+
   if (deckTypeFilter) {
     const currentValue = deckTypeFilter.value;
     const uniqueTypes = [...new Set(deckCards.map(p => p.type).filter(Boolean))];
@@ -27,7 +27,7 @@ export function displayDeckCardsCatalog(filterName = "", filterType = "") {
     deckTypeFilter.value = currentValue;
   }
 
-  // ✅ Appliquer les filtres
+
   const filteredDeck = deckCards.filter(pokemon => {
     const nameMatch = pokemon.name.toLowerCase().includes(filterName.toLowerCase());
     const typeMatch = filterType ? pokemon.type === filterType : true;
@@ -39,7 +39,7 @@ export function displayDeckCardsCatalog(filterName = "", filterType = "") {
     return;
   }
 
-  // ✅ Grouper les cartes identiques par ID + compter les doublons
+
   const groupedCards = {};
   filteredDeck.forEach(pokemon => {
     const key = pokemon.id;
@@ -50,7 +50,6 @@ export function displayDeckCardsCatalog(filterName = "", filterType = "") {
     }
   });
 
-  // ✅ Afficher les cartes uniques avec compteur
   Object.values(groupedCards).forEach(pokemon => {
     const card = document.createElement("div");
     card.className = `pokemon-card type-${pokemon.type}`;
