@@ -10,11 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!card) return;
     // Si l'utilisateur commence le drag sur l'image, on force le drag du parent
     if (e.target.tagName === "IMG" && e.target.parentElement.parentElement === card) {
-      // Empêche le drag natif de l'image
       e.preventDefault();
-      // On simule le drag du parent (non supporté nativement, donc on ne fait rien ici)
-      // L'attribut draggable est déjà sur .pokemon-card, donc le drag doit fonctionner si l'utilisateur commence sur la carte
-      // On laisse le dragstart se faire normalement sur la carte
       return;
     }
     card.classList.add("dragging");
@@ -109,5 +105,16 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem("handCards", JSON.stringify(handCards));
     displayDeckCards();
     displayHandCards();
+    // Ajoute l'animation à la dernière carte de la pioche
+    setTimeout(() => {
+      const cards = deckZone.querySelectorAll('.pokemon-card');
+      if (cards.length > 0) {
+        const lastCard = cards[cards.length - 1];
+        lastCard.classList.add('card-drop-animate');
+        lastCard.addEventListener('animationend', () => {
+          lastCard.classList.remove('card-drop-animate');
+        }, { once: true });
+      }
+    }, 30);
   });
 });
