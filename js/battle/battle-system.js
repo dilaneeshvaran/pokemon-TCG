@@ -9,15 +9,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (battleBtn) {
     battleBtn.addEventListener("click", () => {
+      const handCards = JSON.parse(localStorage.getItem("handCards")) || [];
+
+      if (handCards.length === 0) {
+        alert("Vous devez avoir au moins 1 carte dans votre main pour commencer une bataille.");
+        return; 
+      }
+
       localStorage.removeItem("battleState");
 
-      const handCards = JSON.parse(localStorage.getItem("handCards")) || [];
       const botCards = drawPack();
 
       const randomIndex = Math.floor(Math.random() * botCards.length);
       botCards.splice(randomIndex, 1);
 
-      if (handCards.length > 0 && botCards.length > 0) {
+      if (botCards.length > 0) {
         localStorage.setItem(
           "playerActivePokemonCard",
           JSON.stringify(handCards[0])
@@ -38,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (exitBattleBtn) {
     exitBattleBtn.addEventListener("click", () => {
-      if (confirm("Voulez vous quitter la bataille ?")) {
+      if (confirm("Voulez-vous quitter la bataille ?")) {
         localStorage.removeItem("playerActivePokemonCard");
         localStorage.removeItem("botActivePokemonCard");
         localStorage.removeItem("battleHandCards");

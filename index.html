@@ -66,6 +66,13 @@
         <p id="cooldownMessage">⏳ Veuillez patienter avant de tirer un nouveau paquet.</p>
       </div>
     </div>
+    <div id="noCardPopup" class="popup-overlay hidden">
+  <div class="popup-content">
+    <span class="popup-close" onclick="document.getElementById('noCardPopup').classList.add('hidden')">&times;</span>
+    <p>Vous devez avoir au moins 1 carte dans votre main pour lancer une bataille.</p>
+  </div>
+</div>
+
 
     <script type="module" src="js/manage-cards.js"></script>
     <script type="module" src="js/pokemon-api.js"></script>
