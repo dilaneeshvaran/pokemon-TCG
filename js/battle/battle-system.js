@@ -1,6 +1,64 @@
 import { drawPack } from "../pokemon-api.js";
 import { selectNewActivePokemon } from "./select-new-active-card.js";
 
+// Fonction utilitaire pour afficher une popup d'alerte stylisée
+function showAlertPopup(message) {
+  let popup = document.getElementById('customAlertPopup');
+  if (!popup) {
+    popup = document.createElement('div');
+    popup.id = 'customAlertPopup';
+    popup.className = 'popup-overlay alert-popup';
+    popup.innerHTML = `
+      <div class="popup-content">
+        <span class="popup-icon">⚠️</span>
+        <div class="alert-message">${message}</div>
+        <button class="btn" id="closeCustomAlertBtn">OK</button>
+      </div>
+    `;
+    document.body.appendChild(popup);
+  } else {
+    popup.querySelector('.alert-message').textContent = message;
+    popup.classList.remove('hidden');
+  }
+  popup.classList.remove('hidden');
+  popup.querySelector('#closeCustomAlertBtn').onclick = () => {
+    popup.classList.add('hidden');
+  };
+}
+
+// Fonction utilitaire pour afficher une popup de confirmation stylisée
+function showConfirmPopup(message, onConfirm) {
+  let popup = document.getElementById('customConfirmPopup');
+  if (!popup) {
+    popup = document.createElement('div');
+    popup.id = 'customConfirmPopup';
+    popup.className = 'popup-overlay alert-popup';
+    popup.innerHTML = `
+      <div class="popup-content">
+        <span class="popup-icon">❓</span>
+        <div class="alert-message">${message}</div>
+        <div style="margin-top:18px;display:flex;gap:16px;justify-content:center;">
+          <button class="btn" id="confirmYesBtn">Oui</button>
+          <button class="btn" id="confirmNoBtn">Non</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(popup);
+  } else {
+    popup.querySelector('.alert-message').textContent = message;
+    popup.classList.remove('hidden');
+  }
+  popup.classList.remove('hidden');
+  popup.querySelector('#confirmYesBtn').onclick = () => {
+    popup.classList.add('hidden');
+    if (onConfirm) onConfirm();
+  };
+  popup.querySelector('#confirmNoBtn').onclick = () => {
+    popup.classList.add('hidden');
+  };
+}
+
+
 document.addEventListener("DOMContentLoaded", () => {
   const battleBtn = document.getElementById("battleBtn");
   const exitBattleBtn = document.getElementById("exitBattleBtn");
@@ -9,15 +67,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (battleBtn) {
     battleBtn.addEventListener("click", () => {
+      const handCards = JSON.parse(localStorage.getItem("handCards")) || [];
+
+      if (handCards.length === 0) {
+        showAlertPopup("Vous devez avoir au moins 1 carte dans votre main pour commencer une bataille.");
+        return; 
+      }
+
       localStorage.removeItem("battleState");
 
-      const handCards = JSON.parse(localStorage.getItem("handCards")) || [];
       const botCards = drawPack();
 
       const randomIndex = Math.floor(Math.random() * botCards.length);
       botCards.splice(randomIndex, 1);
 
-      if (handCards.length > 0 && botCards.length > 0) {
+      if (botCards.length > 0) {
         localStorage.setItem(
           "playerActivePokemonCard",
           JSON.stringify(handCards[0])
@@ -38,14 +102,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (exitBattleBtn) {
     exitBattleBtn.addEventListener("click", () => {
-      if (confirm("Voulez vous quitter la bataille ?")) {
+      showConfirmPopup("Voulez-vous quitter la bataille ?", () => {
         localStorage.removeItem("playerActivePokemonCard");
         localStorage.removeItem("botActivePokemonCard");
         localStorage.removeItem("battleHandCards");
         localStorage.removeItem("battleBotCards");
         localStorage.removeItem("battleState");
         window.location.href = "index.html";
-      }
+      });
     });
   }
 

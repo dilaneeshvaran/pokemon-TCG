@@ -9,26 +9,14 @@
   </head>
   <body>
     <div class="container">
-      <h1 class="page-title">Pokémon TCG</h1>
+        <h1 class="page-title">Catalog</h1>
+        <div class="filters">
+          <input type="text" id="deckSearchInput" placeholder="Rechercher dans la pioche" />
+          <select id="deckTypeFilter">
+            <option value="">Tous les types</option>
+          </select>
+         </div>
 
-      <div class="action-area">
-        <!-- <div style="width: fit-content;" id="drawNewCardsBtnDiv"> -->
-        <button id="drawNewCardsBtn">
-          Tirer des cartes aléatoires (5 cartes)
-        </button>
-        <!-- </div> -->
-        <div id="timerDisplay"></div>
-      </div>
-
-      <div class="game-area">
-        <div class="card-section">
-          <div class="section-header">
-            <h3>Votre Main</h3>
-          </div>
-          <div class="section-body">
-            <div id="handContainer" class="card-container"></div>
-          </div>
-        </div>
 
         <div class="card-section">
           <div class="section-header">
@@ -39,14 +27,7 @@
           </div>
         </div>
       </div>
-
-      <div class="action-area">
-        <button id="battleBtn">Lancer une bataille avec un dresseur</button>
-        <button id="catalogBtn">Catalogue</button>
-      </div>
     </div>
-
-    
 
     <div id="cardDetailsModal">
       <div class="modal-content">
@@ -66,22 +47,13 @@
         <p id="cooldownMessage">⏳ Veuillez patienter avant de tirer un nouveau paquet.</p>
       </div>
     </div>
-    <div id="noCardPopup" class="popup-overlay hidden">
-  <div class="popup-content">
-    <span class="popup-close" onclick="document.getElementById('noCardPopup').classList.add('hidden')">&times;</span>
-    <p>Vous devez avoir au moins 1 carte dans votre main pour lancer une bataille.</p>
-  </div>
-</div>
+    <div class="action-area">
+    <button id="returnBtn">Retour</button>
+    </div>
 
-
-    <script type="module" src="js/manage-cards.js"></script>
     <script type="module" src="js/pokemon-api.js"></script>
-    <script type="module" src="js/display-cards.js"></script>
-    <script type="module" src="js/drag-card-to-hand.js"></script>
-    <script type="module" src="js/display-timer.js"></script>
     <script type="module" src="js/display-card-details.js"></script>
-    <script type="module" src="js/battle/battle-system.js"></script>
-    <script type="module" src="js/catalog/navigation.js"></script>
     <script type="module" src="js/catalog/catalog.js"></script>
+    <script type="module" src="js/catalog/navigation.js"></script>
   </body>
 </html>
