@@ -575,3 +575,134 @@ Pour appliquer ce style à un <a> ou <input>, ajoute simplement la classe .btn :
   transform: scale(1.08) rotate(-4deg);
   z-index: 10;
 }
+
+/* --- Styles spécifiques à la page d'échange de cartes --- */
+.exchange-area {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 40px;
+  margin: 30px 0 20px 0;
+}
+
+.exchange-section {
+  flex: 1;
+  background: #fafdff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(30,144,255,0.10);
+  padding: 18px 12px 24px 12px;
+  min-width: 260px;
+  max-width: 350px;
+  text-align: center;
+  position: relative;
+}
+
+.exchange-section h3 {
+  font-size: 1.25em;
+  margin-bottom: 12px;
+  color: #1e90ff;
+  letter-spacing: 1px;
+}
+
+.vs-badge {
+  align-self: center;
+  background: linear-gradient(90deg, #ff5252 0%, #1e90ff 100%);
+  color: #fff;
+  font-weight: bold;
+  font-size: 2.2em;
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 12px rgba(30,144,255,0.18);
+  margin: 0 18px;
+  border: 4px solid #fff;
+}
+
+.exchange-btn {
+  background: linear-gradient(90deg, #ff9800 0%, #ffc107 100%);
+  color: #222;
+  font-weight: bold;
+  border: none;
+  border-radius: 18px;
+  padding: 8px 18px;
+  font-size: 1em;
+  margin-top: 8px;
+  margin-bottom: 0;
+  box-shadow: 0 2px 8px rgba(255,152,0,0.10);
+  transition: background 0.2s, color 0.2s;
+}
+.exchange-btn:hover {
+  background: linear-gradient(90deg, #ffc107 0%, #ff9800 100%);
+  color: #000;
+}
+
+#exchangeModal .popup-content {
+  max-width: 600px;
+  min-width: 320px;
+  padding: 32px 24px 28px 24px;
+  border-radius: 20px;
+  border: 3px solid #1e90ff;
+  background: #fafdff;
+  box-shadow: 0 8px 32px rgba(30,144,255,0.18), 0 2px 8px rgba(0,0,0,0.18);
+}
+#exchangeModal h3 {
+  color: #1e90ff;
+  margin-bottom: 18px;
+}
+#exchangeProposal {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 32px;
+  margin-bottom: 18px;
+}
+#exchangeProposal > div {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(30,144,255,0.10);
+  padding: 12px 10px 10px 10px;
+  min-width: 120px;
+}
+#exchangeProposal img {
+  width: 90px;
+  height: 100px;
+  object-fit: contain;
+  margin-bottom: 6px;
+}
+#acceptExchangeBtn, #declineExchangeBtn {
+  min-width: 120px;
+  margin: 0 12px;
+  font-size: 1.1em;
+  padding: 10px 0;
+  border-radius: 18px;
+}
+#acceptExchangeBtn {
+  background: linear-gradient(90deg, #43ea7b 0%, #1de9b6 100%);
+  color: #222;
+}
+#acceptExchangeBtn:hover {
+  background: linear-gradient(90deg, #1de9b6 0%, #43ea7b 100%);
+  color: #000;
+}
+#declineExchangeBtn {
+  background: linear-gradient(90deg, #ff5252 0%, #ff9800 100%);
+  color: #fff;
+}
+#declineExchangeBtn:hover {
+  background: linear-gradient(90deg, #ff9800 0%, #ff5252 100%);
+  color: #fff;
+}
+
+@media (max-width: 900px) {
+  .exchange-area {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 18px;
+  }
+  .vs-badge {
+    margin: 18px auto;
+  }
+}

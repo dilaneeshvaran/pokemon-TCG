@@ -9,7 +9,7 @@
   </head>
   <body>
     <div class="container">
-      <h1 class="page-title">Pokémon TCG</h1>
+      <h1 class="page-title">Échanger des cartes</h1>
 
       <div class="action-area">
         <!-- <div style="width: fit-content;" id="drawNewCardsBtnDiv"> -->
@@ -24,24 +24,31 @@
         <button id="tradeBtn">Échanger des cartes</button>
       </div>
 
-      <div class="game-area">
-        <div class="card-section">
-          <div class="section-header">
-            <h3>Votre Main</h3>
-          </div>
-          <div class="section-body">
-            <div id="handContainer" class="card-container"></div>
-          </div>
+      <div class="exchange-area">
+        <div class="exchange-section">
+          <h3>Votre Main</h3>
+          <div id="handContainer" class="card-container"></div>
         </div>
-
-        <div class="card-section">
-          <div class="section-header">
-            <h3>Votre Pioche</h3>
-          </div>
-          <div class="section-body">
-            <div id="deckContainer" class="card-container"></div>
-          </div>
+        <div class="vs-badge">VS</div>
+        <div class="exchange-section">
+          <h3>Cartes du Bot</h3>
+          <div id="botHandContainer" class="card-container"></div>
         </div>
+      </div>
+      <div class="exchange-area" style="margin-top:0;">
+        <div class="exchange-section">
+          <h3>Votre proposition</h3>
+          <div id="playerSelectedCard" class="card-container" style="justify-content:center;"></div>
+        </div>
+        <div class="vs-badge">⇄</div>
+        <div class="exchange-section">
+          <h3>Proposition du bot</h3>
+          <div id="botSelectedCard" class="card-container" style="justify-content:center;"></div>
+        </div>
+      </div>
+      <div class="action-area" id="exchangeActionArea" style="display:none;">
+        <button id="validateExchangeBtn">Valider</button>
+        <button id="cancelExchangeBtn">Refuser</button>
       </div>
 
       <div class="action-area">
@@ -77,16 +84,17 @@
   </div>
 </div>
 
+    <div id="exchangeModal" class="popup-overlay hidden">
+      <div class="popup-content">
+        <h3>Proposition d'échange</h3>
+        <div id="exchangeProposal"></div>
+        <button id="acceptExchangeBtn">Accepter</button>
+        <button id="declineExchangeBtn">Refuser</button>
+      </div>
+    </div>
 
-    <script type="module" src="js/manage-cards.js"></script>
-    <script type="module" src="js/pokemon-api.js"></script>
-    <script type="module" src="js/display-cards.js"></script>
-    <script type="module" src="js/drag-card-to-hand.js"></script>
-    <script type="module" src="js/display-timer.js"></script>
+
     <script type="module" src="js/display-card-details.js"></script>
-    <script type="module" src="js/battle/battle-system.js"></script>
-    <script type="module" src="js/catalog/navigation.js"></script>
-    <script type="module" src="js/catalog/catalog.js"></script>
     <script type="module" src="js/trade/trade.js"></script>
   </body>
 </html>
