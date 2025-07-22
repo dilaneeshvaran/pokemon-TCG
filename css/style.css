@@ -470,6 +470,23 @@ body {
   color: #1e90ff;
 }
 
+.popup-ok-btn {
+  background-color: #1e90ff;
+  color: white;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: bold;
+  margin-top: 15px;
+  transition: background-color 0.3s ease;
+}
+
+.popup-ok-btn:hover {
+  background-color: #0f7ae5;
+}
+
 /* --- Masquer la popup par défaut --- */
 .hidden {
   display: none;
