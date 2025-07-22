@@ -37,6 +37,13 @@ closePopupBtn.addEventListener('click', () => {
   popup.classList.add('hidden');
 });
 
+const tradeBtn = document.getElementById("tradeBtn");
+if (tradeBtn) {
+  tradeBtn.addEventListener("click", () => {
+    window.location.href = "trade.html";
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   displayDeckCards();
 });

@@ -65,6 +65,7 @@ export function displayHandCards() {
     card.className = `pokemon-card type-${pokemon.type}`;
     card.dataset.pokemonId = pokemon.id;
     card.id = `pokemon-card-${pokemon.id}`;
+    card.setAttribute("draggable", true);
 
     card.innerHTML = `
       <img src="${pokemon.image}" alt="${pokemon.name}">
