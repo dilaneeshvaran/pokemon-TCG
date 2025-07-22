@@ -996,3 +996,21 @@ button:focus, .dropzone:focus {
   0% { box-shadow: 0 0 12px 2px #43ea7b; }
   100% { box-shadow: 0 0 24px 6px #1de9b6; }
 }
+
+#user-hand-section {
+  width: 100%;
+  max-width: none;
+  margin-bottom: 18px;
+}
+#userCatalogContainer {
+  width: 100%;
+  max-width: 100vw;
+  min-height: 220px;
+  justify-content: flex-start;
+  overflow-x: auto;
+}
+/* Spécifique à la page trade : élargir la section catalogue */
+#user-hand-section.exchange-section {
+  max-width: none !important;
+  width: 100% !important;
+}
