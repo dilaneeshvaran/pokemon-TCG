@@ -504,8 +504,7 @@ body {
 }
 
 /* Style global pour tous les boutons du projet */
-button,
-.btn {
+.blue-btn {
   background: linear-gradient(90deg, #1e90ff 0%, #4fc3f7 100%);
   color: white;
   border: none;
@@ -522,8 +521,7 @@ button,
   letter-spacing: 0.5px;
 }
 
-button:hover,
-.btn:hover {
+.blue-btn:hover {
   background: linear-gradient(90deg, #4fc3f7 0%, #1e90ff 100%);
   box-shadow: 0 8px 24px rgba(30, 144, 255, 0.25), 0 2px 8px rgba(0, 0, 0, 0.12);
   transform: translateY(-2px) scale(1.04);
