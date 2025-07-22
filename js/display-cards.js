@@ -1,4 +1,5 @@
 import { showCardDetails } from "./display-card-details.js";
+import { groupCardsByIdPreservingOrder } from "./catalog/catalog.js";
 
 const handContainer = document.getElementById("handContainer");
 const deckContainer = document.getElementById("deckContainer");
@@ -13,7 +14,11 @@ export function displayDeckCards() {
     return;
   }
 
-  deckCards.forEach((pokemon) => {
+  // Group cards by ID while preserving order
+  const { groupedCards, cardOrder } = groupCardsByIdPreservingOrder(deckCards);
+
+  cardOrder.forEach((cardId) => {
+    const pokemon = groupedCards[cardId];
     if (!pokemon.name) return;
 
     const card = document.createElement("div");
@@ -28,6 +33,9 @@ export function displayDeckCards() {
   <div class="card-body">
     <h5 class="card-title">${pokemon.name}</h5>
     <div class="card-type">${pokemon.type}</div>
+    ${
+      pokemon.count > 1 ? `<div class="card-count">x${pokemon.count}</div>` : ""
+    }
   </div>
 `;
 

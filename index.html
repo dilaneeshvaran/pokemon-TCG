@@ -46,11 +46,9 @@
 
       <div class="action-area">
         <button id="battleBtn">Lancer une bataille avec un dresseur</button>
-        <button id="catalogBtn">Catalogue</button>
+        <button class="blue-btn" id="catalogBtn">Catalogue</button>
       </div>
     </div>
-
-    
 
     <div id="cardDetailsModal">
       <div class="modal-content">
@@ -66,17 +64,25 @@
     <!-- popup attendre pour tirer nouveau booster -->
     <div id="cooldownPopup" class="popup-overlay hidden">
       <div class="popup-content">
-        <span id="closePopupBtn" class="popup-close">&times;</span>
-        <p id="cooldownMessage">⏳ Veuillez patienter avant de tirer un nouveau paquet.</p>
+        <p id="cooldownMessage">
+          ⏳ Veuillez patienter avant de tirer un nouveau paquet.
+        </p>
+        <button id="closePopupBtn" class="popup-ok-btn">OK</button>
       </div>
     </div>
     <div id="noCardPopup" class="popup-overlay hidden">
-  <div class="popup-content">
-    <span class="popup-close" onclick="document.getElementById('noCardPopup').classList.add('hidden')">&times;</span>
-    <p>Vous devez avoir au moins 1 carte dans votre main pour lancer une bataille.</p>
-  </div>
-</div>
-
+      <div class="popup-content">
+        <span
+          class="popup-close"
+          onclick="document.getElementById('noCardPopup').classList.add('hidden')"
+          >&times;</span
+        >
+        <p>
+          Vous devez avoir au moins 1 carte dans votre main pour lancer une
+          bataille.
+        </p>
+      </div>
+    </div>
 
     <script type="module" src="js/manage-cards.js"></script>
     <script type="module" src="js/pokemon-api.js"></script>

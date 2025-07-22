@@ -218,7 +218,7 @@
 
 .active-pokemon .pokemon-card {
   width: 140px;
-  height: 190px;
+  height: 210px;
 }
 
 .active-pokemon .pokemon-card .card-title {
@@ -227,11 +227,11 @@
 }
 
 .active-pokemon .pokemon-card img {
-  height: 110px;
+  height: 100px;
 }
 
 .battlePokemonImage {
-  margin-top: -15px;
+  margin-top: -20px;
 }
 
 .player-cards .pokemon-card,
