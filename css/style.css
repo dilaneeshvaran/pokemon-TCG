@@ -752,7 +752,7 @@ Pour appliquer ce style à un <a> ou <input>, ajoute simplement la classe .btn :
 
 .dropzone, .card-slot {
   width: 120px;
-  height: 160px;
+  height: 220px;
   background-color: #fff;
   border: 2px dashed #bbb;
   border-radius: 10px;
@@ -823,7 +823,7 @@ button {
 
 /* Dropzone highlight amélioré */
 .dropzone, .card-slot {
-  min-height: 180px;
+  min-height: 220px;
   min-width: 120px;
   background: linear-gradient(135deg, #fafdff 60%, #e3f2fd 100%);
   border: 2.5px dashed #bbb;

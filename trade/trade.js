@@ -146,7 +146,7 @@ function resetExchangeSelection() {
   selectedBotCard = null;
   displaySelectedCard("playerSelectedCard", null);
   displaySelectedCard("botSelectedCard", null);
-  document.getElementById("exchangeActionArea").style.display = "none";
+  document.getElementById("exchangeActionArea").style.display = "block";
   displayHandCards();
   displayBotHandCards();
 }
@@ -164,10 +164,9 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem("botCards", JSON.stringify(botCards));
   }
 
-  displayHandCards();
-  displayBotHandCards();
   displayUserCatalog();
   displaySelectedCard("playerSelectedCard", null);
+  document.getElementById("exchangeActionArea").style.display = "block";
 
   const playerDropZone = document.getElementById("playerSelectedCard");
 
@@ -191,20 +190,9 @@ document.addEventListener("DOMContentLoaded", () => {
     let botCards = JSON.parse(localStorage.getItem("botCards")) || [];
     let myCard;
     if (source === "userCatalogContainer") {
-      if (handCards.length >= 5) {
-        alert("Votre main est pleine (5 cartes max) !");
-        return;
-      }
       const catalogIndex = deckCards.findIndex(card => card.id == cardId);
       if (catalogIndex === -1) return;
       myCard = deckCards[catalogIndex];
-      // Ajoute à la main et retire du catalogue
-      handCards.push(myCard);
-      deckCards.splice(catalogIndex, 1);
-      localStorage.setItem("handCards", JSON.stringify(handCards));
-      localStorage.setItem("deckCards", JSON.stringify(deckCards));
-      displayUserCatalog();
-      displayHandCards();
     } else if (source === "handContainer") {
       myCard = handCards.find(card => card.id == cardId);
     } else {
@@ -216,36 +204,53 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
     selectedPlayerCard = myCard;
-    const randomBotCard = botCards[Math.floor(Math.random() * botCards.length)];
-    selectedBotCard = randomBotCard;
     displaySelectedCard("playerSelectedCard", selectedPlayerCard);
-    displaySelectedCard("botSelectedCard", selectedBotCard);
+    // Affiche un message de chargement dans la zone du bot
+    const botZone = document.getElementById("botSelectedCard");
+    botZone.innerHTML = '<span style="color:#888;font-size:1em;">Le bot réfléchit...</span>';
+    // Ne pas masquer le bouton d'échange
+    // Simule la réflexion du bot avec un délai
+    setTimeout(() => {
+      const randomBotCard = botCards[Math.floor(Math.random() * botCards.length)];
+      selectedBotCard = randomBotCard;
+      displaySelectedCard("botSelectedCard", selectedBotCard);
+      displayBotHandCards(selectedBotCard.id);
+      // Le bouton reste toujours visible
+    }, 1000);
     displayHandCards(selectedPlayerCard.id);
-    displayBotHandCards(selectedBotCard.id);
-    document.getElementById("exchangeActionArea").style.display = "";
   });
 
   // Validation de l’échange
   document.getElementById("validateExchangeBtn").addEventListener("click", () => {
-    if (!selectedPlayerCard || !selectedBotCard) return;
+    // Affiche la popup de confirmation
+    document.getElementById("confirmExchangeModal").classList.remove("hidden");
+  });
 
-    let handCards = JSON.parse(localStorage.getItem("handCards")) || [];
-    let botCards = JSON.parse(localStorage.getItem("botCards")) || [];
-
-    const myIndex = handCards.findIndex(card => card.id === selectedPlayerCard.id);
-    const botIndex = botCards.findIndex(card => card.id === selectedBotCard.id);
-
-    if (myIndex !== -1 && botIndex !== -1) {
-      // Échanger les cartes
-      handCards.splice(myIndex, 1, selectedBotCard);
-      botCards.splice(botIndex, 1, selectedPlayerCard);
-
-      localStorage.setItem("handCards", JSON.stringify(handCards));
-      localStorage.setItem("botCards", JSON.stringify(botCards));
-      alert("Échange effectué !");
+  // Gestion des boutons de la popup
+  document.getElementById("confirmExchangeBtn").addEventListener("click", () => {
+    if (!selectedPlayerCard || !selectedBotCard) {
+      document.getElementById("confirmExchangeModal").classList.add("hidden");
+      return;
     }
-
-    resetExchangeSelection();
+    let deckCards = JSON.parse(localStorage.getItem("deckCards")) || [];
+    let botCards = JSON.parse(localStorage.getItem("botCards")) || [];
+    // Retirer la carte du joueur du catalogue utilisateur
+    const playerCardIndex = deckCards.findIndex(card => card.id === selectedPlayerCard.id);
+    if (playerCardIndex !== -1) {
+      deckCards.splice(playerCardIndex, 1);
+    }
+    // Ajouter la carte du joueur à la main du bot
+    botCards.push(selectedPlayerCard);
+    // Ajouter la carte du bot au catalogue utilisateur
+    deckCards.push(selectedBotCard);
+    localStorage.setItem("deckCards", JSON.stringify(deckCards));
+    localStorage.setItem("botCards", JSON.stringify(botCards));
+    document.getElementById("confirmExchangeModal").classList.add("hidden");
+    window.location.href = "index.html";
+    // resetExchangeSelection(); // inutile après redirection
+  });
+  document.getElementById("cancelExchangeModalBtn").addEventListener("click", () => {
+    document.getElementById("confirmExchangeModal").classList.add("hidden");
   });
 
   // Annuler l’échange

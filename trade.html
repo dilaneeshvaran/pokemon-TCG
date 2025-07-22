@@ -13,13 +13,10 @@
     <div class="action-area">
       <div id="timerDisplay"></div>
     </div>
-    <div class="exchange-section" id="user-catalog-section">
+   
+    <div class="exchange-section" id="user-hand-section">
       <h3>Votre catalogue</h3>
       <div id="userCatalogContainer" class="card-container"></div>
-    </div>
-    <div class="exchange-section" id="user-hand-section">
-      <h3>Votre main</h3>
-      <div id="handContainer" class="card-container"></div>
     </div>
     <div class="exchange-area" style="margin-top:0;">
       <div class="exchange-section">
@@ -43,5 +40,19 @@
   </div>
 
   <script type="module" src="trade/trade.js"></script>
+  <script>
+    document.getElementById('homeBtn').addEventListener('click', function() {
+      window.location.href = 'index.html';
+    });
+  </script>
+
+  <!-- Popup de confirmation d'échange -->
+  <div id="confirmExchangeModal" class="popup-overlay hidden">
+    <div class="popup-content">
+      <p>Voulez-vous vraiment valider cet échange ?</p>
+      <button id="confirmExchangeBtn" class="blue-btn">Confirmer</button>
+      <button id="cancelExchangeModalBtn" class="blue-btn">Annuler</button>
+    </div>
+  </div>
 </body>
 </html>
