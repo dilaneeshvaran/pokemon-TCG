@@ -6,6 +6,54 @@ import {
 import { updatePokemonHP } from "./update-battle-cards.js";
 import { checkForEliminations } from "./manage-eliminations.js";
 
+// Ajout : correspondance type -> effet de statut
+const typeStatusEffect = {
+  fire: 'burn',
+  ice: 'freeze',
+  poison: 'poison',
+  electric: 'paralyze',
+};
+
+function applyStatusEffect(target, effect) {
+  if (!target.status || target.status === 'none') {
+    target.status = effect;
+    target.statusTurns = 3;
+  }
+}
+
+function processStatusEffects(card, isPlayer, logArr) {
+  if (!card.status || card.status === 'none') return { canAct: true };
+  let canAct = true;
+  let statusMsg = '';
+  if (card.status === 'burn') {
+    card.hp -= 10;
+    statusMsg = (isPlayer ? 'Votre' : 'Le') + ' Pokémon est brûlé et perd 10 PV !';
+  } else if (card.status === 'poison') {
+    card.hp -= 8;
+    statusMsg = (isPlayer ? 'Votre' : 'Le') + ' Pokémon est empoisonné et perd 8 PV !';
+  } else if (card.status === 'freeze') {
+    if (Math.random() < 0.5) {
+      canAct = false;
+      statusMsg = (isPlayer ? 'Votre' : 'Le') + ' Pokémon est gelé et ne peut pas attaquer !';
+    }
+  } else if (card.status === 'paralyze') {
+    if (Math.random() < 0.25) {
+      canAct = false;
+      statusMsg = (isPlayer ? 'Votre' : 'Le') + ' Pokémon est paralysé et ne peut pas attaquer !';
+    }
+  }
+  if (card.statusTurns !== undefined) {
+    card.statusTurns--;
+    if (card.statusTurns <= 0) {
+      card.status = 'none';
+      card.statusTurns = 0;
+      statusMsg += (statusMsg ? ' ' : '') + ((isPlayer ? 'Votre' : 'Le') + ' Pokémon n\'est plus affecté.');
+    }
+  }
+  if (statusMsg) logArr.push(statusMsg);
+  return { canAct };
+}
+
 export function processBattleActions(playerAction, botAction) {
   const playerActivePokemonCard = JSON.parse(
     localStorage.getItem("playerActivePokemonCard")
@@ -27,17 +75,44 @@ export function processBattleActions(playerAction, botAction) {
   let playerDamageTaken = 0;
   let botDamageTaken = 0;
   let battleMessage = "";
+  let statusMessages = [];
+
+  // Appliquer les effets de statut AVANT les actions
+  const playerStatus = processStatusEffects(playerActivePokemonCard, true, statusMessages);
+  const botStatus = processStatusEffects(botActivePokemonCard, false, statusMessages);
 
   //logic
   // Cas attaque spéciale
-  if (playerAction === "special" && botAction === "special") {
-    playerDamageTaken = Math.round(botActivePokemonCard.attack * 1.5) + botTypeBonus;
-    botDamageTaken = Math.round(playerActivePokemonCard.attack * 1.5) + playerTypeBonus;
+  // Si gelé/paralysé et ne peut pas agir, l'action devient "none"
+  let playerSpecialFailed = false;
+  let botSpecialFailed = false;
+  if (playerStatus.canAct && playerAction === "special") {
+    if (Math.random() < 0.5) {
+      playerSpecialFailed = true;
+    }
+  }
+  if (botStatus.canAct && botAction === "special") {
+    if (Math.random() < 0.5) {
+      botSpecialFailed = true;
+    }
+  }
+  const playerRealAction = playerStatus.canAct ? (playerSpecialFailed ? "fail_special" : playerAction) : "none";
+  const botRealAction = botStatus.canAct ? (botSpecialFailed ? "fail_special" : botAction) : "none";
+
+  if (playerRealAction === "fail_special" && botRealAction === "fail_special") {
+    battleMessage = "Les deux attaques spéciales échouent !";
+  } else if (playerRealAction === "fail_special") {
+    battleMessage = "Votre attaque spéciale échoue !";
+  } else if (botRealAction === "fail_special") {
+    battleMessage = "L'attaque spéciale adverse échoue !";
+  } else if (playerRealAction === "special" && botRealAction === "special") {
+    playerDamageTaken = botActivePokemonCard.attack + botTypeBonus;
+    botDamageTaken = playerActivePokemonCard.attack + playerTypeBonus;
     playerActivePokemonCard.hp -= playerDamageTaken;
     botActivePokemonCard.hp -= botDamageTaken;
     battleMessage = `Deux attaques spéciales ! Vous infligez ${botDamageTaken} dégâts et subissez ${playerDamageTaken} dégâts !`;
-  } else if (playerAction === "special" && botAction === "defend") {
-    let attackPower = Math.round(playerActivePokemonCard.attack * 1.5) + playerTypeBonus;
+  } else if (playerRealAction === "special" && botRealAction === "defend") {
+    let attackPower = playerActivePokemonCard.attack + playerTypeBonus;
     let remainingDamage = Math.max(0, attackPower - botActivePokemonCard.defense);
     botDamageTaken = remainingDamage;
     botActivePokemonCard.hp -= botDamageTaken;
@@ -46,8 +121,8 @@ export function processBattleActions(playerAction, botAction) {
     } else {
       battleMessage = "L'adversaire a bloqué votre attaque spéciale !";
     }
-  } else if (playerAction === "defend" && botAction === "special") {
-    let attackPower = Math.round(botActivePokemonCard.attack * 1.5) + botTypeBonus;
+  } else if (playerRealAction === "defend" && botRealAction === "special") {
+    let attackPower = botActivePokemonCard.attack + botTypeBonus;
     let remainingDamage = Math.max(0, attackPower - playerActivePokemonCard.defense);
     playerDamageTaken = remainingDamage;
     playerActivePokemonCard.hp -= playerDamageTaken;
@@ -56,25 +131,25 @@ export function processBattleActions(playerAction, botAction) {
     } else {
       battleMessage = "Vous avez bloqué l'attaque spéciale de l'adversaire !";
     }
-  } else if (playerAction === "special" && botAction === "attack") {
+  } else if (playerRealAction === "special" && botRealAction === "attack") {
     playerDamageTaken = botActivePokemonCard.attack + botTypeBonus;
-    botDamageTaken = Math.round(playerActivePokemonCard.attack * 1.5) + playerTypeBonus;
+    botDamageTaken = playerActivePokemonCard.attack + playerTypeBonus;
     playerActivePokemonCard.hp -= playerDamageTaken;
     botActivePokemonCard.hp -= botDamageTaken;
     battleMessage = `Vous utilisez une attaque spéciale ! Vous infligez ${botDamageTaken} dégâts et subissez ${playerDamageTaken} dégâts !`;
-  } else if (playerAction === "attack" && botAction === "special") {
-    playerDamageTaken = Math.round(botActivePokemonCard.attack * 1.5) + botTypeBonus;
+  } else if (playerRealAction === "attack" && botRealAction === "special") {
+    playerDamageTaken = botActivePokemonCard.attack + botTypeBonus;
     botDamageTaken = playerActivePokemonCard.attack + playerTypeBonus;
     playerActivePokemonCard.hp -= playerDamageTaken;
     botActivePokemonCard.hp -= botDamageTaken;
     battleMessage = `L'adversaire utilise une attaque spéciale ! Vous infligez ${botDamageTaken} dégâts et subissez ${playerDamageTaken} dégâts !`;
-  } else if (playerAction === "attack" && botAction === "attack") {
+  } else if (playerRealAction === "attack" && botRealAction === "attack") {
     playerDamageTaken = botActivePokemonCard.attack + botTypeBonus;
     botDamageTaken = playerActivePokemonCard.attack + playerTypeBonus;
     playerActivePokemonCard.hp -= playerDamageTaken;
     botActivePokemonCard.hp -= botDamageTaken;
     battleMessage = `Vous avez infligé ${botDamageTaken} dégâts et subi ${playerDamageTaken} dégâts!`;
-  } else if (playerAction === "attack" && botAction === "defend") {
+  } else if (playerRealAction === "attack" && botRealAction === "defend") {
     let attackPower = playerActivePokemonCard.attack + playerTypeBonus;
     let remainingDamage = Math.max(0, attackPower - botActivePokemonCard.defense);
     botDamageTaken = remainingDamage;
@@ -84,7 +159,7 @@ export function processBattleActions(playerAction, botAction) {
     } else {
       battleMessage = "L'adversaire a bloqué votre attaque!";
     }
-  } else if (playerAction === "defend" && botAction === "attack") {
+  } else if (playerRealAction === "defend" && botRealAction === "attack") {
     let attackPower = botActivePokemonCard.attack + botTypeBonus;
     let remainingDamage = Math.max(0, attackPower - playerActivePokemonCard.defense);
     playerDamageTaken = remainingDamage;
@@ -94,8 +169,30 @@ export function processBattleActions(playerAction, botAction) {
     } else {
       battleMessage = "Vous avez bloqué l'attaque de l'adversaire!";
     }
+  } else if (playerRealAction === "none" && botRealAction === "none") {
+    battleMessage = "Aucun des deux Pokémon n'a pu agir ce tour !";
+  } else if (playerRealAction === "none") {
+    battleMessage = "Votre Pokémon n'a pas pu agir ce tour !";
+  } else if (botRealAction === "none") {
+    battleMessage = "Le Pokémon adverse n'a pas pu agir ce tour !";
   } else {
     battleMessage = "Les deux joueurs se défendent. Rien ne se passe!";
+  }
+
+  // Application des effets de statut lors d'une attaque spéciale
+  if (playerRealAction === "special") {
+    const effect = typeStatusEffect[playerActivePokemonCard.type];
+    if (effect && (!botActivePokemonCard.status || botActivePokemonCard.status === 'none') && Math.random() < 0.8) {
+      applyStatusEffect(botActivePokemonCard, effect);
+      statusMessages.push(`Votre attaque spéciale inflige l'effet ${effect === 'burn' ? 'brûlure' : effect === 'freeze' ? 'gel' : effect === 'poison' ? 'empoisonnement' : effect === 'paralyze' ? 'paralysie' : effect} !`);
+    }
+  }
+  if (botRealAction === "special") {
+    const effect = typeStatusEffect[botActivePokemonCard.type];
+    if (effect && (!playerActivePokemonCard.status || playerActivePokemonCard.status === 'none') && Math.random() < 0.8) {
+      applyStatusEffect(playerActivePokemonCard, effect);
+      statusMessages.push(`L'attaque spéciale adverse inflige l'effet ${effect === 'burn' ? 'brûlure' : effect === 'freeze' ? 'gel' : effect === 'poison' ? 'empoisonnement' : effect === 'paralyze' ? 'paralysie' : effect} !`);
+    }
   }
 
   if (playerActivePokemonCard.hp < 0) playerActivePokemonCard.hp = 0;
@@ -115,7 +212,11 @@ export function processBattleActions(playerAction, botAction) {
   const battleLog = document.getElementById("battleLog");
 
   if (battleLog) {
-    battleLog.innerHTML = `<div class="battle-log-message">${battleMessage}</div>`;
+    let logHtml = `<div class="battle-log-message">${battleMessage}</div>`;
+    if (statusMessages.length > 0) {
+      logHtml += statusMessages.map(msg => `<div class='battle-log-message status-message'>${msg}</div>`).join('');
+    }
+    battleLog.innerHTML = logHtml;
   }
 
   setTimeout(() => {

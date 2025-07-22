@@ -11,7 +11,6 @@ import { processBattleActions } from "./battle-logic.js";
 document.addEventListener("DOMContentLoaded", () => {
   const attackBtn = document.getElementById("attackBtn");
   const defendBtn = document.getElementById("defendBtn");
-  // Ajout du bouton attaque spéciale
   let specialBtn = document.getElementById("specialAttackBtn");
   if (!specialBtn) {
     specialBtn = document.createElement("button");
@@ -22,16 +21,72 @@ document.addEventListener("DOMContentLoaded", () => {
       attackBtn.parentNode.insertBefore(specialBtn, defendBtn);
     }
   }
-
+  const potionBtn = document.getElementById("potionBtn");
+  const reviveBtn = document.getElementById("reviveBtn");
+  let potionUsed = false;
+  if (localStorage.getItem('potionUsedOnce') === '1') potionUsed = true;
+  let reviveUsed = false;
+  if (localStorage.getItem('reviveUsedOnce') === '1') reviveUsed = true;
+  let reviveMode = false;
   const battleLog = document.getElementById("battleLog");
   const battleActions = document.querySelector(".battle-actions");
   const playerSelectedAction = document.getElementById("playerSelectedAction");
   const botSelectedAction = document.getElementById("botSelectedAction");
 
-  if (attackBtn && defendBtn && specialBtn) {
-    attackBtn.addEventListener("click", () => handlePlayerAction("attack"));
-    defendBtn.addEventListener("click", () => handlePlayerAction("defend"));
-    specialBtn.addEventListener("click", () => handlePlayerAction("special"));
+  if (battleActions) {
+    if (attackBtn) attackBtn.addEventListener("click", () => handlePlayerAction("attack"));
+    if (defendBtn) defendBtn.addEventListener("click", () => handlePlayerAction("defend"));
+    if (specialBtn) specialBtn.addEventListener("click", () => handlePlayerAction("special"));
+    if (potionBtn) {
+      if (potionUsed) {
+        potionBtn.disabled = true;
+        potionBtn.classList.add('item-used');
+      }
+      potionBtn.addEventListener("click", () => {
+        if (potionUsed) {
+          alert("Vous ne pouvez utiliser la Potion qu'une seule fois par partie !");
+          return;
+        }
+        localStorage.setItem('potionUsedOnce', '1');
+        let playerActive = JSON.parse(localStorage.getItem("playerActivePokemonCard"));
+        if (!playerActive) return;
+        if (!playerActive.maxHp) playerActive.maxHp = playerActive.hp;
+        playerActive.hp = Math.min(playerActive.hp + 50, playerActive.maxHp);
+        playerActive.status = 'none';
+        playerActive.statusTurns = 0;
+        localStorage.setItem("playerActivePokemonCard", JSON.stringify(playerActive));
+        updateBattleLog("Vous utilisez une Potion ! Votre Pokémon est soigné de 50 PV et guéri de tout statut.");
+        potionBtn.disabled = true;
+        potionBtn.classList.add('item-used');
+        potionUsed = true;
+        setTimeout(() => window.location.reload(), 800);
+      });
+    }
+    if (reviveBtn) {
+      if (reviveUsed) {
+        reviveBtn.disabled = true;
+        reviveBtn.classList.add('item-used');
+      }
+      reviveBtn.addEventListener("click", () => {
+        if (reviveUsed) {
+          alert("Vous ne pouvez utiliser le Rappel qu'une seule fois par partie !");
+          return;
+        }
+        // Marque le rappel comme utilisé pour toute la partie
+        localStorage.setItem('reviveUsedOnce', '1');
+        let hand = JSON.parse(localStorage.getItem("battleHandCards")) || [];
+        if (!hand.some(card => card.eliminated)) {
+          updateBattleLog("Aucun Pokémon K.O. à ressusciter !");
+          return;
+        }
+        reviveMode = true;
+        localStorage.setItem('reviveMode', '1');
+        updateBattleLog("Cliquez sur un Pokémon K.O. à ressusciter !");
+        reviveBtn.disabled = true;
+        reviveBtn.classList.add('item-used');
+        reviveUsed = true;
+      });
+    }
   }
 
   //exporter pour l'acces global de la fonction handlePlayerAction
@@ -77,10 +132,10 @@ document.addEventListener("DOMContentLoaded", () => {
     displayBotAction(botChoice);
 
     processBattleLog(playerAction, botChoice);
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 3500));
 
     processBattleActions(playerAction, botChoice);
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 3500));
 
     if (playerSelectedAction) {
       playerSelectedAction.innerHTML = "";
