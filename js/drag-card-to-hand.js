@@ -11,6 +11,21 @@ function removeCardPreservingOrder(cards, cardId) {
   return null;
 }
 
+// move a card group to the end of the deck
+function moveCardGroupToEnd(deckCards, cardToAdd) {
+  // remove all instances of this card from deck
+  const existingCards = [];
+  for (let i = deckCards.length - 1; i >= 0; i--) {
+    if (deckCards[i].id === cardToAdd.id) {
+      existingCards.unshift(deckCards.splice(i, 1)[0]); // unshift to maintain original order
+    }
+  }
+
+  // add the new card first, then all existing instances
+  deckCards.push(cardToAdd);
+  deckCards.push(...existingCards);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const handZone = document.getElementById("handContainer");
   const deckZone = document.getElementById("deckContainer");
@@ -91,7 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const firstCardInHand = handCards[0];
       handCards.shift();
       handCards.push(movedCard);
-      deckCards.push(firstCardInHand);
+      moveCardGroupToEnd(deckCards, firstCardInHand);
     }
     localStorage.setItem("deckCards", JSON.stringify(deckCards));
     localStorage.setItem("handCards", JSON.stringify(handCards));
@@ -127,7 +142,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const movedCard = removeCardPreservingOrder(handCards, cardId);
     if (!movedCard) return;
 
-    deckCards.push(movedCard);
+    moveCardGroupToEnd(deckCards, movedCard);
     localStorage.setItem("deckCards", JSON.stringify(deckCards));
     localStorage.setItem("handCards", JSON.stringify(handCards));
     displayDeckCards();
