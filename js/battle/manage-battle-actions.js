@@ -4,6 +4,7 @@ import {
 } from "./display-battle-actions.js";
 
 import { updateBattleLog, MESSAGES } from "./helper/send-battle-logs.js";
+import { getTypeAdvantageInt } from "./card-type-advantage.js";
 
 import { processBattleActions } from "./battle-logic.js";
 
@@ -36,6 +37,9 @@ document.addEventListener("DOMContentLoaded", () => {
   //exporter pour l'acces global de la fonction handlePlayerAction
   window.handlePlayerAction = handlePlayerAction;
 
+  // Rendre la fonction accessible globalement pour le bot
+  window.getTypeAdvantageInt = getTypeAdvantageInt;
+
   async function handlePlayerAction(playerAction) {
     if (battleActions) {
       battleActions.style.display = "none";
@@ -48,11 +52,28 @@ document.addEventListener("DOMContentLoaded", () => {
     await new Promise((resolve) => setTimeout(resolve, delayInSeconds * 1000));
 
     // Le bot peut aussi choisir l'attaque spéciale
-    const botRand = Math.random();
+    // Bot intelligent
+    const playerActivePokemonCard = JSON.parse(localStorage.getItem("playerActivePokemonCard"));
+    const botActivePokemonCard = JSON.parse(localStorage.getItem("botActivePokemonCard"));
     let botChoice = "attack";
-    if (botRand < 0.33) botChoice = "attack";
-    else if (botRand < 0.66) botChoice = "defend";
-    else botChoice = "special";
+    if (botActivePokemonCard && playerActivePokemonCard) {
+      // Si PV bot < 40%, privilégier défense
+      if (botActivePokemonCard.hp / (botActivePokemonCard.maxHp || 100) < 0.4) {
+        botChoice = Math.random() < 0.7 ? "defend" : "attack";
+      } else {
+        // Si avantage de type, privilégier attaque spéciale
+        const getTypeAdvantageInt = window.getTypeAdvantageInt || ((a,b)=>0);
+        let typeBonus = 0;
+        try {
+          typeBonus = getTypeAdvantageInt(botActivePokemonCard.type, playerActivePokemonCard.type);
+        } catch(e) {}
+        if (typeBonus > 0) {
+          botChoice = Math.random() < 0.7 ? "special" : "attack";
+        } else {
+          botChoice = Math.random() < 0.5 ? "attack" : "special";
+        }
+      }
+    }
     displayBotAction(botChoice);
 
     processBattleLog(playerAction, botChoice);
