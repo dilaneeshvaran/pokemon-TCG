@@ -16,9 +16,21 @@ export function displayBotAction(action) {
 }
 
 function createActionBadge(action) {
-  const icon = action === "attack" ? "⚔️" : "🛡️";
-  const text = action === "attack" ? "Attaque" : "Défense";
-  return `<div class="action-badge ${action}-badge">
+  let icon = "";
+  let text = "";
+  let extraClass = "";
+  if (action === "attack") {
+    icon = "⚔️";
+    text = "Attaque";
+  } else if (action === "defend") {
+    icon = "🛡️";
+    text = "Défense";
+  } else if (action === "special") {
+    icon = "✨";
+    text = "Attaque spéciale";
+    extraClass = "special-anim";
+  }
+  return `<div class="action-badge ${action}-badge ${extraClass}">
               <span class="action-icon">${icon}</span>
               <span class="action-text">${text}</span>
             </div>`;
@@ -40,6 +52,8 @@ function createResultBadge(text) {
   let resultBadgeClass = "";
   if (text == "Bloqué!") {
     resultBadgeClass = "blocked";
+  } else if (text.toLowerCase().includes("spéciale")) {
+    resultBadgeClass = "special-anim";
   } else {
     resultBadgeClass = "damage";
   }

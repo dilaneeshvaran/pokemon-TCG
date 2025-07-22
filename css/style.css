@@ -921,3 +921,25 @@ button:focus, .dropzone:focus {
   outline: 3px solid #1e90ff;
   outline-offset: 2px;
 }
+
+/* Animation spéciale pour l'attaque spéciale */
+@keyframes specialAttackFlash {
+  0% { box-shadow: 0 0 0 0 #ffd700, 0 0 0 0 #00e5ff; transform: scale(1); }
+  20% { box-shadow: 0 0 16px 8px #ffd700, 0 0 32px 16px #00e5ff; transform: scale(1.12) rotate(-2deg); }
+  40% { box-shadow: 0 0 32px 16px #ffd700, 0 0 48px 24px #00e5ff; transform: scale(1.18) rotate(2deg); }
+  60% { box-shadow: 0 0 16px 8px #ffd700, 0 0 32px 16px #00e5ff; transform: scale(1.12) rotate(-2deg); }
+  100% { box-shadow: 0 0 0 0 #ffd700, 0 0 0 0 #00e5ff; transform: scale(1); }
+}
+
+.special-anim, .special-anim-badge {
+  animation: specialAttackFlash 0.8s cubic-bezier(0.4,1.4,0.4,1) 1;
+  background: linear-gradient(90deg, #fffbe6 0%, #e0f7fa 100%);
+  color: #d2691e !important;
+  border-radius: 12px;
+  border: 2.5px solid #ffd700;
+  box-shadow: 0 0 12px 2px #ffd700, 0 0 8px 2px #00e5ff;
+}
+
+.special-anim-badge .action-icon {
+  filter: drop-shadow(0 0 6px #ffd700) drop-shadow(0 0 4px #00e5ff);
+}
