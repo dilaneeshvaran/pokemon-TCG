@@ -1,5 +1,16 @@
 import { displayDeckCards, displayHandCards } from "./display-cards.js";
 
+// remove one instance of a card while preserving order
+function removeCardPreservingOrder(cards, cardId) {
+  // Find last occurrence of card to prevent position changes
+  for (let i = cards.length - 1; i >= 0; i--) {
+    if (cards[i].id == cardId) {
+      return cards.splice(i, 1)[0];
+    }
+  }
+  return null;
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const handZone = document.getElementById("handContainer");
   const deckZone = document.getElementById("deckContainer");
@@ -9,7 +20,10 @@ document.addEventListener("DOMContentLoaded", () => {
     let card = e.target.closest(".pokemon-card");
     if (!card) return;
     // Si l'utilisateur commence le drag sur l'image, on force le drag du parent
-    if (e.target.tagName === "IMG" && e.target.parentElement.parentElement === card) {
+    if (
+      e.target.tagName === "IMG" &&
+      e.target.parentElement.parentElement === card
+    ) {
       // Empêche le drag natif de l'image
       e.preventDefault();
       // On simule le drag du parent (non supporté nativement, donc on ne fait rien ici)
@@ -22,7 +36,11 @@ document.addEventListener("DOMContentLoaded", () => {
     e.dataTransfer.setData("text/plain", card.dataset.pokemonId);
     e.dataTransfer.setData("source-container", card.parentElement.id);
     if (e.dataTransfer.setDragImage) {
-      e.dataTransfer.setDragImage(card, card.offsetWidth / 2, card.offsetHeight / 2);
+      e.dataTransfer.setDragImage(
+        card,
+        card.offsetWidth / 2,
+        card.offsetHeight / 2
+      );
     }
   }
 
@@ -64,9 +82,9 @@ document.addEventListener("DOMContentLoaded", () => {
     if (source === "handContainer") return; // déjà dans la main
     let deckCards = JSON.parse(localStorage.getItem("deckCards")) || [];
     let handCards = JSON.parse(localStorage.getItem("handCards")) || [];
-    const cardIndex = deckCards.findIndex((card) => card.id == cardId);
-    if (cardIndex === -1) return;
-    const movedCard = deckCards.splice(cardIndex, 1)[0];
+
+    const movedCard = removeCardPreservingOrder(deckCards, cardId);
+    if (!movedCard) return;
     if (handCards.length < 4) {
       handCards.push(movedCard);
     } else if (handCards.length == 4) {
@@ -81,13 +99,17 @@ document.addEventListener("DOMContentLoaded", () => {
     displayHandCards();
     // Ajoute l'animation à la dernière carte de la main
     setTimeout(() => {
-      const cards = handZone.querySelectorAll('.pokemon-card');
+      const cards = handZone.querySelectorAll(".pokemon-card");
       if (cards.length > 0) {
         const lastCard = cards[cards.length - 1];
-        lastCard.classList.add('card-drop-animate');
-        lastCard.addEventListener('animationend', () => {
-          lastCard.classList.remove('card-drop-animate');
-        }, { once: true });
+        lastCard.classList.add("card-drop-animate");
+        lastCard.addEventListener(
+          "animationend",
+          () => {
+            lastCard.classList.remove("card-drop-animate");
+          },
+          { once: true }
+        );
       }
     }, 30);
   });
@@ -101,9 +123,10 @@ document.addEventListener("DOMContentLoaded", () => {
     if (source === "deckContainer") return; // déjà dans la pioche
     let deckCards = JSON.parse(localStorage.getItem("deckCards")) || [];
     let handCards = JSON.parse(localStorage.getItem("handCards")) || [];
-    const cardIndex = handCards.findIndex((card) => card.id == cardId);
-    if (cardIndex === -1) return;
-    const movedCard = handCards.splice(cardIndex, 1)[0];
+
+    const movedCard = removeCardPreservingOrder(handCards, cardId);
+    if (!movedCard) return;
+
     deckCards.push(movedCard);
     localStorage.setItem("deckCards", JSON.stringify(deckCards));
     localStorage.setItem("handCards", JSON.stringify(handCards));
