@@ -1,100 +1,47 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pokémon</title>
-    <link rel="icon" href="data:," />
-    <link rel="stylesheet" href="./css/style.css" />
-  </head>
-  <body>
-    <div class="container">
-      <h1 class="page-title">Échanger des cartes</h1>
-
-      <div class="action-area">
-        <!-- <div style="width: fit-content;" id="drawNewCardsBtnDiv"> -->
-        <button id="drawNewCardsBtn">
-          Tirer des cartes aléatoires (5 cartes)
-        </button>
-        <!-- </div> -->
-        <div id="timerDisplay"></div>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Échange de cartes Pokémon</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1 class="page-title exchange-header"><span class="exchange-icon">🔄</span> Échanger des cartes Pokémon</h1>
+    <p class="exchange-description">Glissez une carte de votre main dans la zone "Votre proposition" pour proposer un échange avec le bot. Le bot choisira une carte au hasard à échanger avec vous.</p>
+    <hr class="exchange-separator" />
+    <div class="action-area">
+      <div id="timerDisplay"></div>
+    </div>
+    <div class="exchange-section" id="user-catalog-section">
+      <h3>Votre catalogue</h3>
+      <div id="userCatalogContainer" class="card-container"></div>
+    </div>
+    <div class="exchange-section" id="user-hand-section">
+      <h3>Votre main</h3>
+      <div id="handContainer" class="card-container"></div>
+    </div>
+    <div class="exchange-area" style="margin-top:0;">
+      <div class="exchange-section">
+        <h3>Votre proposition</h3>
+        <div id="playerSelectedCard" class="card-container dropzone" style="justify-content:center;"></div>
       </div>
-
-      <div class="action-area">
-        <button id="tradeBtn">Échanger des cartes</button>
-      </div>
-
-      <div class="exchange-area">
-        <div class="exchange-section">
-          <h3>Votre Main</h3>
-          <div id="handContainer" class="card-container"></div>
-        </div>
-        <div class="vs-badge">VS</div>
-        <div class="exchange-section">
-          <h3>Cartes du Bot</h3>
-          <div id="botHandContainer" class="card-container"></div>
-        </div>
-      </div>
-      <div class="exchange-area" style="margin-top:0;">
-        <div class="exchange-section">
-          <h3>Votre proposition</h3>
-          <div id="playerSelectedCard" class="card-container" style="justify-content:center;"></div>
-        </div>
-        <div class="vs-badge">⇄</div>
-        <div class="exchange-section">
-          <h3>Proposition du bot</h3>
-          <div id="botSelectedCard" class="card-container" style="justify-content:center;"></div>
-        </div>
-      </div>
-      <div class="action-area" id="exchangeActionArea" style="display:none;">
-        <button id="validateExchangeBtn">Valider</button>
-        <button id="cancelExchangeBtn">Refuser</button>
-      </div>
-
-      <div class="action-area">
-        <button id="battleBtn">Lancer une bataille avec un dresseur</button>
-        <button id="catalogBtn">Catalogue</button>
+      <div class="vs-badge">⇄</div>
+      <div class="exchange-section">
+        <h3>Proposition du bot</h3>
+        <div id="botSelectedCard" class="card-container dropzone" style="justify-content:center;"></div>
       </div>
     </div>
-
-    
-
-    <div id="cardDetailsModal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="card-details-title" id="cardDetailsTitle">
-            Détails de la carte
-          </h5>
-          <button class="card-details-btn-close" aria-label="Fermer"></button>
-        </div>
-        <div id="cardDetailsContent"></div>
-      </div>
+    <div class="action-area" id="exchangeActionArea" style="display:none;">
+      <button id="validateExchangeBtn">✅ Valider l'échange</button>
+      <button id="cancelExchangeBtn">❌ Annuler</button>
     </div>
-    <!-- popup attendre pour tirer nouveau booster -->
-    <div id="cooldownPopup" class="popup-overlay hidden">
-      <div class="popup-content">
-        <span id="closePopupBtn" class="popup-close">&times;</span>
-        <p id="cooldownMessage">⏳ Veuillez patienter avant de tirer un nouveau paquet.</p>
-      </div>
+    <hr class="exchange-separator" />
+    <div class="action-area">
+      <button id="homeBtn">🏠 Retour à l'accueil</button>
     </div>
-    <div id="noCardPopup" class="popup-overlay hidden">
-  <div class="popup-content">
-    <span class="popup-close" onclick="document.getElementById('noCardPopup').classList.add('hidden')">&times;</span>
-    <p>Vous devez avoir au moins 1 carte dans votre main pour lancer une bataille.</p>
   </div>
-</div>
 
-    <div id="exchangeModal" class="popup-overlay hidden">
-      <div class="popup-content">
-        <h3>Proposition d'échange</h3>
-        <div id="exchangeProposal"></div>
-        <button id="acceptExchangeBtn">Accepter</button>
-        <button id="declineExchangeBtn">Refuser</button>
-      </div>
-    </div>
-
-
-    <script type="module" src="js/display-card-details.js"></script>
-    <script type="module" src="js/trade/trade.js"></script>
-  </body>
+  <script type="module" src="trade/trade.js"></script>
+</body>
 </html>
