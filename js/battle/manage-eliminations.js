@@ -30,6 +30,15 @@ export function checkForEliminations() {
     if (battleLog) {
       battleLog.innerHTML = `<div class="battle-log-message">Votre ${playerActivePokemonCard.name} est K.O. !</div>`;
     }
+    // add attack special after defeat player
+    const botSpecialAttacks = parseInt(
+      localStorage.getItem("botSpecialAttacks") || "0"
+    );
+    localStorage.setItem(
+      "botSpecialAttacks",
+      (botSpecialAttacks + 1).toString()
+    );
+
     eliminateActivePokemon("player");
     selectNewActivePokemon("player");
   }
@@ -38,6 +47,22 @@ export function checkForEliminations() {
     if (battleLog) {
       battleLog.innerHTML = `<div class="battle-log-message">Le ${botActivePokemonCard.name} adversaire est K.O. !</div>`;
     }
+    // increment player special attack after defeat enemy
+    const playerSpecialAttacks = parseInt(
+      localStorage.getItem("playerSpecialAttacks") || "0"
+    );
+    localStorage.setItem(
+      "playerSpecialAttacks",
+      (playerSpecialAttacks + 1).toString()
+    );
+
+    // update the special attack button state
+    const updateSpecialAttackButtonState =
+      window.updateSpecialAttackButtonState;
+    if (updateSpecialAttackButtonState) {
+      setTimeout(() => updateSpecialAttackButtonState(), 100);
+    }
+
     eliminateActivePokemon("bot");
     selectNewActivePokemon("bot");
   }
@@ -54,6 +79,22 @@ function lastCardsEliminationCheck(
     botActivePokemonCard &&
     botActivePokemonCard.hp <= 0
   ) {
+    // both pokemon eliminated = still increment special attack counters
+    const playerSpecialAttacks = parseInt(
+      localStorage.getItem("playerSpecialAttacks") || "0"
+    );
+    const botSpecialAttacks = parseInt(
+      localStorage.getItem("botSpecialAttacks") || "0"
+    );
+    localStorage.setItem(
+      "playerSpecialAttacks",
+      (playerSpecialAttacks + 1).toString()
+    );
+    localStorage.setItem(
+      "botSpecialAttacks",
+      (botSpecialAttacks + 1).toString()
+    );
+
     const playerHand = (
       JSON.parse(localStorage.getItem("battleHandCards")) || []
     ).filter((c) => !c.eliminated);

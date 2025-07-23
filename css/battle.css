@@ -123,6 +123,38 @@
   background-color: #666666;
 }
 
+.special-btn {
+  color: white;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background-color: #9b59b6;
+  font-size: 20px;
+}
+
+.special-btn:hover {
+  background-color: #8e44ad;
+}
+
+.special-btn.special-disabled {
+  background-color: #666666;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.special-btn.special-disabled:hover {
+  background-color: #666666;
+}
+
+.battle-btn {
+  color: white;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  font-size: 20px;
+  border: none;
+  cursor: pointer;
+  margin: 10px 5px;
+}
+
 .player-cards,
 .bot-cards {
   display: flex;

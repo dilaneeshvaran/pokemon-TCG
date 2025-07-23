@@ -81,6 +81,10 @@ document.addEventListener("DOMContentLoaded", () => {
       localStorage.setItem("playerConsecutiveDefends", "0");
       localStorage.setItem("botConsecutiveDefends", "0");
 
+      // init special attack counters to 0 at start of battle
+      localStorage.setItem("playerSpecialAttacks", "0");
+      localStorage.setItem("botSpecialAttacks", "0");
+
       const botCards = drawPack();
 
       const randomIndex = Math.floor(Math.random() * botCards.length);
@@ -113,9 +117,12 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.removeItem("battleHandCards");
         localStorage.removeItem("battleBotCards");
         localStorage.removeItem("battleState");
-        // Reset consecutive defend counters
+        // reset consecutive defend counters
         localStorage.removeItem("playerConsecutiveDefends");
         localStorage.removeItem("botConsecutiveDefends");
+        // reset special attack counters
+        localStorage.removeItem("playerSpecialAttacks");
+        localStorage.removeItem("botSpecialAttacks");
         // Ajout : réinitialise l'utilisation de la potion et du rappel
         localStorage.removeItem("potionUsedOnce");
         localStorage.removeItem("reviveUsedOnce");

@@ -52,11 +52,34 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // update special attack button state based on available special attacks
+  function updateSpecialAttackButtonState() {
+    const playerSpecialAttacks = parseInt(
+      localStorage.getItem("playerSpecialAttacks") || "0"
+    );
+    if (specialBtn) {
+      if (playerSpecialAttacks <= 0) {
+        specialBtn.disabled = true;
+        specialBtn.classList.add("special-disabled");
+        specialBtn.textContent = `Attaque spéciale (0)`;
+        specialBtn.title =
+          "Vous devez éliminer un Pokémon adverse pour obtenir une attaque spéciale";
+      } else {
+        specialBtn.disabled = false;
+        specialBtn.classList.remove("special-disabled");
+        specialBtn.textContent = `Attaque spéciale (${playerSpecialAttacks})`;
+        specialBtn.title = "";
+      }
+    }
+  }
+
   // Make the function globally accessible
   window.updateDefendButtonState = updateDefendButtonState;
+  window.updateSpecialAttackButtonState = updateSpecialAttackButtonState;
 
   // Call this function initially and after each battle turn
   updateDefendButtonState();
+  updateSpecialAttackButtonState();
 
   if (battleActions) {
     if (attackBtn)
@@ -150,6 +173,25 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
+    // Check if special attack is available
+    if (playerAction === "special") {
+      const playerSpecialAttacks = parseInt(
+        localStorage.getItem("playerSpecialAttacks") || "0"
+      );
+      if (playerSpecialAttacks <= 0) {
+        alert(
+          "Vous devez éliminer un Pokémon adverse pour obtenir une attaque spéciale !"
+        );
+        return;
+      }
+      // Decrement the special attack counter
+      localStorage.setItem(
+        "playerSpecialAttacks",
+        (playerSpecialAttacks - 1).toString()
+      );
+      updateSpecialAttackButtonState();
+    }
+
     if (battleActions) {
       battleActions.style.display = "none";
     }
@@ -174,13 +216,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let botChoice = "attack";
     if (botActivePokemonCard && playerActivePokemonCard) {
+      const botSpecialAttacks = parseInt(
+        localStorage.getItem("botSpecialAttacks") || "0"
+      );
+
       //si pv bot < 40%, privilégier defense (sauf si limite atteinte)
       if (
         botActivePokemonCard.hp / (botActivePokemonCard.maxHp || 100) < 0.4 &&
         botConsecutiveDefends < 2
       ) {
         botChoice = Math.random() < 0.7 ? "defend" : "attack";
-      } else {
+      } else if (botSpecialAttacks > 0) {
+        // Si le bot a des attaques spéciales disponibles, il peut les utiliser
         // Si avantage de type, privilégier attaque spéciale
         const getTypeAdvantageInt = window.getTypeAdvantageInt || ((a, b) => 0);
         let typeBonus = 0;
@@ -195,6 +242,16 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
           botChoice = Math.random() < 0.5 ? "attack" : "special";
         }
+        // Decrement bots special attack counter when using special attack
+        if (botChoice === "special") {
+          localStorage.setItem(
+            "botSpecialAttacks",
+            (botSpecialAttacks - 1).toString()
+          );
+        }
+      } else {
+        // si pas d'attaque speciale disponible, choix entre attaque et defense
+        botChoice = Math.random() < 0.6 ? "attack" : "defend";
       }
     }
     displayBotAction(botChoice);
@@ -225,6 +282,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
           updateBattleLog(MESSAGES.YOUR_TURN);
           updateDefendButtonState(); // update defend button state after each turn
+          updateSpecialAttackButtonState(); // update special attack button state after each turn
         }
       } else {
         localStorage.setItem("battleState", "botSelecting");
