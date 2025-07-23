@@ -3,19 +3,23 @@ import {
   displayPlayerActionResult,
   displayBotActionResult,
 } from "./display-battle-actions.js";
-import { updatePokemonHP, updateBotActivePokemon, updatePlayerActivePokemon } from "./update-battle-cards.js";
+import {
+  updatePokemonHP,
+  updateBotActivePokemon,
+  updatePlayerActivePokemon,
+} from "./update-battle-cards.js";
 import { checkForEliminations } from "./manage-eliminations.js";
 
 // Ajout : correspondance type -> effet de statut
 const typeStatusEffect = {
-  fire: 'burn',
-  ice: 'freeze',
-  poison: 'poison',
-  electric: 'paralyze',
+  fire: "burn",
+  ice: "freeze",
+  poison: "poison",
+  electric: "paralyze",
 };
 
 function applyStatusEffect(target, effect) {
-  if (!target.status || target.status === 'none') {
+  if (!target.status || target.status === "none") {
     target.status = effect;
     target.statusTurns = 2;
   } else if (target.status === effect) {
@@ -29,33 +33,43 @@ function applyStatusEffect(target, effect) {
 }
 
 function processStatusEffects(card, isPlayer, logArr) {
-  if (!card.status || card.status === 'none') return { canAct: true };
+  if (!card.status || card.status === "none") return { canAct: true };
   let canAct = true;
-  let statusMsg = '';
-  if (card.status === 'burn') {
+  let statusMsg = "";
+  if (card.status === "burn") {
     card.hp -= 20;
-    statusMsg = (isPlayer ? 'Votre' : 'Le') + ' Pokémon est brûlé et perd 20 PV !';
-  } else if (card.status === 'poison') {
+    statusMsg =
+      (isPlayer ? "Votre" : "Le") + " Pokémon est brûlé et perd 20 PV !";
+  } else if (card.status === "poison") {
     card.hp -= 20;
-    statusMsg = (isPlayer ? 'Votre' : 'Le') + ' Pokémon est empoisonné et perd 20 PV !';
-  } else if (card.status === 'freeze') {
+    statusMsg =
+      (isPlayer ? "Votre" : "Le") + " Pokémon est empoisonné et perd 20 PV !";
+  } else if (card.status === "freeze") {
     card.hp -= 10;
     if (Math.random() < 0.4) {
       canAct = false;
-      statusMsg = (isPlayer ? 'Votre' : 'Le') + ' Pokémon est gelé, ne peut pas attaquer et perd 10 PV !';
+      statusMsg =
+        (isPlayer ? "Votre" : "Le") +
+        " Pokémon est gelé, ne peut pas attaquer et perd 10 PV !";
     } else {
-      statusMsg = (isPlayer ? 'Votre' : 'Le') + ' Pokémon est gelé mais parvient à attaquer (perd 10 PV) !';
+      statusMsg =
+        (isPlayer ? "Votre" : "Le") +
+        " Pokémon est gelé mais parvient à attaquer (perd 10 PV) !";
     }
-  } else if (card.status === 'paralyze' || card.status === 'sleep') {
+  } else if (card.status === "paralyze" || card.status === "sleep") {
     canAct = false;
-    statusMsg = (isPlayer ? 'Votre' : 'Le') + ' Pokémon est paralysé/endormi et ne peut pas attaquer !';
+    statusMsg =
+      (isPlayer ? "Votre" : "Le") +
+      " Pokémon est paralysé/endormi et ne peut pas attaquer !";
   }
   if (card.statusTurns !== undefined) {
     card.statusTurns--;
     if (card.statusTurns <= 0) {
-      card.status = 'none';
+      card.status = "none";
       card.statusTurns = 0;
-      statusMsg += (statusMsg ? ' ' : '') + ((isPlayer ? 'Votre' : 'Le') + ' Pokémon n\'est plus affecté.');
+      statusMsg +=
+        (statusMsg ? " " : "") +
+        ((isPlayer ? "Votre" : "Le") + " Pokémon n'est plus affecté.");
     }
   }
   if (statusMsg) logArr.push(statusMsg);
@@ -68,6 +82,48 @@ export function processBattleActions(playerAction, botAction) {
   );
   const botActivePokemonCard = JSON.parse(
     localStorage.getItem("botActivePokemonCard")
+  );
+
+  // tracking continuous defend actions
+  let playerConsecutiveDefends = parseInt(
+    localStorage.getItem("playerConsecutiveDefends") || "0"
+  );
+  let botConsecutiveDefends = parseInt(
+    localStorage.getItem("botConsecutiveDefends") || "0"
+  );
+
+  // check if defend is allowed (max 2 in a row)
+  let playerActionAllowed = playerAction;
+  let botActionAllowed = botAction;
+
+  if (playerAction === "defend" && playerConsecutiveDefends >= 2) {
+    playerActionAllowed = "attack"; // force attack if blocked 2 times in a row
+  }
+  if (botAction === "defend" && botConsecutiveDefends >= 2) {
+    botActionAllowed = "attack"; // force attack if blocked 2 times in a row
+  }
+
+  // update consecutive defend counter
+  if (playerActionAllowed === "defend") {
+    playerConsecutiveDefends++;
+  } else {
+    playerConsecutiveDefends = 0;
+  }
+
+  if (botActionAllowed === "defend") {
+    botConsecutiveDefends++;
+  } else {
+    botConsecutiveDefends = 0;
+  }
+
+  // save updated counters
+  localStorage.setItem(
+    "playerConsecutiveDefends",
+    playerConsecutiveDefends.toString()
+  );
+  localStorage.setItem(
+    "botConsecutiveDefends",
+    botConsecutiveDefends.toString()
   );
 
   //get the type advantage
@@ -85,27 +141,55 @@ export function processBattleActions(playerAction, botAction) {
   let battleMessage = "";
   let statusMessages = [];
 
+  // add messages for forced actions bcoz of consecutive defends
+  if (playerAction === "defend" && playerActionAllowed === "attack") {
+    statusMessages.push(
+      "Vous ne pouvez plus vous défendre après 2 tours consécutifs ! Action forcée : Attaque"
+    );
+  }
+  if (botAction === "defend" && botActionAllowed === "attack") {
+    statusMessages.push(
+      "L'adversaire ne peut plus se défendre après 2 tours consécutifs ! Action forcée : Attaque"
+    );
+  }
+
   // Appliquer les effets de statut AVANT les actions
-  const playerStatus = processStatusEffects(playerActivePokemonCard, true, statusMessages);
-  const botStatus = processStatusEffects(botActivePokemonCard, false, statusMessages);
+  const playerStatus = processStatusEffects(
+    playerActivePokemonCard,
+    true,
+    statusMessages
+  );
+  const botStatus = processStatusEffects(
+    botActivePokemonCard,
+    false,
+    statusMessages
+  );
 
   //logic
   // Cas attaque spéciale
   // Si gelé/paralysé et ne peut pas agir, l'action devient "none"
   let playerSpecialFailed = false;
   let botSpecialFailed = false;
-  if (playerStatus.canAct && playerAction === "special") {
+  if (playerStatus.canAct && playerActionAllowed === "special") {
     if (Math.random() < 0.5) {
       playerSpecialFailed = true;
     }
   }
-  if (botStatus.canAct && botAction === "special") {
+  if (botStatus.canAct && botActionAllowed === "special") {
     if (Math.random() < 0.5) {
       botSpecialFailed = true;
     }
   }
-  const playerRealAction = playerStatus.canAct ? (playerSpecialFailed ? "fail_special" : playerAction) : "none";
-  const botRealAction = botStatus.canAct ? (botSpecialFailed ? "fail_special" : botAction) : "none";
+  const playerRealAction = playerStatus.canAct
+    ? playerSpecialFailed
+      ? "fail_special"
+      : playerActionAllowed
+    : "none";
+  const botRealAction = botStatus.canAct
+    ? botSpecialFailed
+      ? "fail_special"
+      : botActionAllowed
+    : "none";
 
   if (playerRealAction === "fail_special" && botRealAction === "fail_special") {
     battleMessage = "Les deux attaques spéciales échouent !";
@@ -121,7 +205,10 @@ export function processBattleActions(playerAction, botAction) {
     battleMessage = `Deux attaques spéciales ! Vous infligez ${botDamageTaken} dégâts et subissez ${playerDamageTaken} dégâts !`;
   } else if (playerRealAction === "special" && botRealAction === "defend") {
     let attackPower = playerActivePokemonCard.attack + playerTypeBonus;
-    let remainingDamage = Math.max(0, attackPower - botActivePokemonCard.defense);
+    let remainingDamage = Math.max(
+      0,
+      attackPower - botActivePokemonCard.defense
+    );
     botDamageTaken = remainingDamage;
     botActivePokemonCard.hp -= botDamageTaken;
     if (remainingDamage > 0) {
@@ -131,7 +218,10 @@ export function processBattleActions(playerAction, botAction) {
     }
   } else if (playerRealAction === "defend" && botRealAction === "special") {
     let attackPower = botActivePokemonCard.attack + botTypeBonus;
-    let remainingDamage = Math.max(0, attackPower - playerActivePokemonCard.defense);
+    let remainingDamage = Math.max(
+      0,
+      attackPower - playerActivePokemonCard.defense
+    );
     playerDamageTaken = remainingDamage;
     playerActivePokemonCard.hp -= playerDamageTaken;
     if (remainingDamage > 0) {
@@ -159,7 +249,10 @@ export function processBattleActions(playerAction, botAction) {
     battleMessage = `Vous avez infligé ${botDamageTaken} dégâts et subi ${playerDamageTaken} dégâts!`;
   } else if (playerRealAction === "attack" && botRealAction === "defend") {
     let attackPower = playerActivePokemonCard.attack + playerTypeBonus;
-    let remainingDamage = Math.max(0, attackPower - botActivePokemonCard.defense);
+    let remainingDamage = Math.max(
+      0,
+      attackPower - botActivePokemonCard.defense
+    );
     botDamageTaken = remainingDamage;
     botActivePokemonCard.hp -= botDamageTaken;
     if (remainingDamage > 0) {
@@ -169,7 +262,10 @@ export function processBattleActions(playerAction, botAction) {
     }
   } else if (playerRealAction === "defend" && botRealAction === "attack") {
     let attackPower = botActivePokemonCard.attack + botTypeBonus;
-    let remainingDamage = Math.max(0, attackPower - playerActivePokemonCard.defense);
+    let remainingDamage = Math.max(
+      0,
+      attackPower - playerActivePokemonCard.defense
+    );
     playerDamageTaken = remainingDamage;
     playerActivePokemonCard.hp -= playerDamageTaken;
     if (remainingDamage > 0) {
@@ -192,7 +288,19 @@ export function processBattleActions(playerAction, botAction) {
     const effect = typeStatusEffect[playerActivePokemonCard.type];
     if (effect && Math.random() < 0.8) {
       applyStatusEffect(botActivePokemonCard, effect);
-      statusMessages.push(`Votre attaque spéciale inflige l'effet ${effect === 'burn' ? 'brûlure' : effect === 'freeze' ? 'gel' : effect === 'poison' ? 'empoisonnement' : effect === 'paralyze' ? 'paralysie' : effect} !`);
+      statusMessages.push(
+        `Votre attaque spéciale inflige l'effet ${
+          effect === "burn"
+            ? "brûlure"
+            : effect === "freeze"
+            ? "gel"
+            : effect === "poison"
+            ? "empoisonnement"
+            : effect === "paralyze"
+            ? "paralysie"
+            : effect
+        } !`
+      );
       // MAJ visuelle immédiate
       updateBotActivePokemon(botActivePokemonCard);
     }
@@ -201,7 +309,19 @@ export function processBattleActions(playerAction, botAction) {
     const effect = typeStatusEffect[botActivePokemonCard.type];
     if (effect && Math.random() < 0.8) {
       applyStatusEffect(playerActivePokemonCard, effect);
-      statusMessages.push(`L'attaque spéciale adverse inflige l'effet ${effect === 'burn' ? 'brûlure' : effect === 'freeze' ? 'gel' : effect === 'poison' ? 'empoisonnement' : effect === 'paralyze' ? 'paralysie' : effect} !`);
+      statusMessages.push(
+        `L'attaque spéciale adverse inflige l'effet ${
+          effect === "burn"
+            ? "brûlure"
+            : effect === "freeze"
+            ? "gel"
+            : effect === "poison"
+            ? "empoisonnement"
+            : effect === "paralyze"
+            ? "paralysie"
+            : effect
+        } !`
+      );
       // MAJ visuelle immédiate
       updatePlayerActivePokemon(playerActivePokemonCard);
     }
@@ -226,7 +346,11 @@ export function processBattleActions(playerAction, botAction) {
   if (battleLog) {
     let logHtml = `<div class="battle-log-message">${battleMessage}</div>`;
     if (statusMessages.length > 0) {
-      logHtml += statusMessages.map(msg => `<div class='battle-log-message status-message'>${msg}</div>`).join('');
+      logHtml += statusMessages
+        .map(
+          (msg) => `<div class='battle-log-message status-message'>${msg}</div>`
+        )
+        .join("");
     }
     battleLog.innerHTML = logHtml;
   }

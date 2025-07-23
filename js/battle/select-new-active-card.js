@@ -31,6 +31,9 @@ function selectRandomBotCard() {
     localStorage.setItem("battleBotCards", JSON.stringify(updatedBotCards));
     localStorage.setItem("botActivePokemonCard", JSON.stringify(selectedCard));
 
+    // reset consecutive defend counters when switching pokemon
+    localStorage.setItem("botConsecutiveDefends", "0");
+
     const battleLog = document.getElementById("battleLog");
     if (battleLog) {
       battleLog.innerHTML = `<div class="battle-log-message">L'adversaire envoie ${selectedCard.name} au combat!</div>`;
@@ -123,6 +126,9 @@ function handleCardDrop(e) {
       JSON.stringify(selectedCard)
     );
 
+    // reset consecutive defend counters when switching pokemon
+    localStorage.setItem("playerConsecutiveDefends", "0");
+
     updateBattleLog(`${selectedCard.name}, a été choisis!`);
 
     playerActivePokemon.removeEventListener("dragover", () => {});
@@ -145,6 +151,12 @@ function handleCardDrop(e) {
           battleActions.style.display = "flex";
         }
         updateBattleLog(MESSAGES.YOUR_TURN);
+
+        // update defend button state after switching poki
+        const updateDefendButtonState = window.updateDefendButtonState;
+        if (updateDefendButtonState) {
+          updateDefendButtonState();
+        }
       }
     }, 1000);
   }
