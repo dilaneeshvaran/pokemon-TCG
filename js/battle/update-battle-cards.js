@@ -3,28 +3,79 @@ import { generateCardHTML } from "./helper/generateCardHTML.js";
 
 export function updatePokemonHP(updatingCard) {
   if (updatingCard && updatingCard == "player") {
-    const playerHP = document.querySelector("#playerActivePokemon .hp");
-    if (playerHP) {
+    const playerActivePokemon = document.getElementById("playerActivePokemon");
+    if (playerActivePokemon) {
       const playerActivePokemonCard = JSON.parse(
         localStorage.getItem("playerActivePokemonCard")
       );
       if (playerActivePokemonCard) {
-        playerHP.innerHTML = `PV: ${playerActivePokemonCard.hp}`;
-        playerHP.classList.add("hp-updated");
-        setTimeout(() => playerHP.classList.remove("hp-updated"), 1000);
+        const typeAdvantageString = getTypeAdvantageString(
+          playerActivePokemonCard.type,
+          JSON.parse(localStorage.getItem("botActivePokemonCard"))?.type || ""
+        );
+        // Ajout : effet trailing barre de vie
+        let hpPrev = playerActivePokemonCard.hpPrev;
+        if (typeof hpPrev !== 'number') {
+          hpPrev = playerActivePokemonCard.hp;
+        }
+        // On stocke la valeur précédente avant de la mettre à jour
+        const prevHp = playerActivePokemonCard.hp;
+        setTimeout(() => {
+          playerActivePokemonCard.hpPrev = prevHp;
+          localStorage.setItem("playerActivePokemonCard", JSON.stringify(playerActivePokemonCard));
+        }, 0);
+        // Barre de vie animée :
+        // 1. Affiche la barre principale à la nouvelle valeur, la barre fantôme à l'ancienne
+        // 2. Après un court délai, fait descendre la barre fantôme à la nouvelle valeur
+        playerActivePokemon.innerHTML = `
+          <div class=\"pokemon-card type-${playerActivePokemonCard.type}\">${generateCardHTML({...playerActivePokemonCard, hpPrev}, false, true, typeAdvantageString)}</div>
+        `;
+        const card = playerActivePokemon.querySelector(".pokemon-card");
+        if (card) {
+          card.classList.add("hp-updated");
+          setTimeout(() => card.classList.remove("hp-updated"), 1000);
+        }
+        // Anime la barre fantôme
+        setTimeout(() => {
+          const ghost = playerActivePokemon.querySelector('.hp-bar-ghost');
+          if (ghost) ghost.style.width = Math.max(0, Math.min(100, Math.round((playerActivePokemonCard.hp / (playerActivePokemonCard.maxHp || playerActivePokemonCard.hp || 100)) * 100))) + '%';
+        }, 80);
       }
     }
   }
   if (updatingCard && updatingCard == "bot") {
-    const botHP = document.querySelector("#botActivePokemon .hp");
-    if (botHP) {
+    const botActivePokemon = document.getElementById("botActivePokemon");
+    if (botActivePokemon) {
       const botActivePokemonCard = JSON.parse(
         localStorage.getItem("botActivePokemonCard")
       );
       if (botActivePokemonCard) {
-        botHP.innerHTML = `PV: ${botActivePokemonCard.hp}`;
-        botHP.classList.add("hp-updated");
-        setTimeout(() => botHP.classList.remove("hp-updated"), 1000);
+        const typeAdvantageString = getTypeAdvantageString(
+          botActivePokemonCard.type,
+          JSON.parse(localStorage.getItem("playerActivePokemonCard"))?.type || ""
+        );
+        // Ajout : effet trailing barre de vie
+        let hpPrev = botActivePokemonCard.hpPrev;
+        if (typeof hpPrev !== 'number') {
+          hpPrev = botActivePokemonCard.hp;
+        }
+        const prevHp = botActivePokemonCard.hp;
+        setTimeout(() => {
+          botActivePokemonCard.hpPrev = prevHp;
+          localStorage.setItem("botActivePokemonCard", JSON.stringify(botActivePokemonCard));
+        }, 0);
+        botActivePokemon.innerHTML = `
+          <div class=\"pokemon-card type-${botActivePokemonCard.type}\">${generateCardHTML({...botActivePokemonCard, hpPrev}, false, true, typeAdvantageString)}</div>
+        `;
+        const card = botActivePokemon.querySelector(".pokemon-card");
+        if (card) {
+          card.classList.add("hp-updated");
+          setTimeout(() => card.classList.remove("hp-updated"), 1000);
+        }
+        setTimeout(() => {
+          const ghost = botActivePokemon.querySelector('.hp-bar-ghost');
+          if (ghost) ghost.style.width = Math.max(0, Math.min(100, Math.round((botActivePokemonCard.hp / (botActivePokemonCard.maxHp || botActivePokemonCard.hp || 100)) * 100))) + '%';
+        }, 80);
       }
     }
   }

@@ -38,8 +38,23 @@ export function generateCardHTML(
       }
       statusHtml = `<div class="status-indicator ${s.class}">${s.icon} ${s.label}${turns}</div>`;
     }
+    // Barre de PV avec effet trailing
+    let maxHp = pokemon.maxHp || pokemon.hp || 100;
+    let percent = Math.max(0, Math.min(100, Math.round((pokemon.hp / maxHp) * 100)));
+    let percentPrev = percent;
+    if (typeof pokemon.hpPrev === 'number') {
+      percentPrev = Math.max(0, Math.min(100, Math.round((pokemon.hpPrev / maxHp) * 100)));
+    }
+    let hpBarClass = 'hp-bar-inner';
+    if (percent < 30) hpBarClass += ' low';
+    else if (percent < 60) hpBarClass += ' mid';
+    let hpBar = `<div class="hp-bar-outer">
+      <div class="hp-bar-ghost" style="width:${percentPrev}%;"></div>
+      <div class="${hpBarClass}" style="width:${percent}%;"></div>
+    </div>`;
     return `
       <div class="pokemon-card-main">
+        ${hpBar}
         <img src="${pokemon.image}" alt="${pokemon.name}" ${
       imageClass ? `class="${imageClass}"` : ""
     }>
