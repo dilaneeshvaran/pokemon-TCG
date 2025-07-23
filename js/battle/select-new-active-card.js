@@ -156,11 +156,15 @@ function handleCardDrop(e) {
         const updateDefendButtonState = window.updateDefendButtonState;
         const updateSpecialAttackButtonState =
           window.updateSpecialAttackButtonState;
+        const updateItemCounters = window.updateItemCounters;
         if (updateDefendButtonState) {
           updateDefendButtonState();
         }
         if (updateSpecialAttackButtonState) {
           updateSpecialAttackButtonState();
+        }
+        if (updateItemCounters) {
+          updateItemCounters();
         }
       }
     }, 1000);

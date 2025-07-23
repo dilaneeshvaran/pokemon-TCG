@@ -17,12 +17,17 @@ document.addEventListener("DOMContentLoaded", () => {
     specialBtn.id = "specialAttackBtn";
     specialBtn.textContent = "Attaque spéciale";
     specialBtn.className = "battle-btn special-btn";
-    if (attackBtn && attackBtn.parentNode) {
-      attackBtn.parentNode.insertBefore(specialBtn, defendBtn);
+    // Insert into the main actions div (battle actions)
+    const mainActions = document.querySelector(".main-actions");
+    if (mainActions && defendBtn) {
+      mainActions.insertBefore(specialBtn, defendBtn);
     }
   }
   const potionBtn = document.getElementById("potionBtn");
   const reviveBtn = document.getElementById("reviveBtn");
+  const potionCounter = document.getElementById("potionCounter");
+  const reviveCounter = document.getElementById("reviveCounter");
+
   let potionUsed = false;
   if (localStorage.getItem("potionUsedOnce") === "1") potionUsed = true;
   let reviveUsed = false;
@@ -52,6 +57,30 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // update item counters display
+  function updateItemCounters() {
+    const potionUsedOnce = localStorage.getItem("potionUsedOnce") === "1";
+    const reviveUsedOnce = localStorage.getItem("reviveUsedOnce") === "1";
+
+    if (potionCounter) {
+      potionCounter.textContent = potionUsedOnce ? "0" : "1";
+      if (potionUsedOnce) {
+        potionCounter.classList.add("used");
+      } else {
+        potionCounter.classList.remove("used");
+      }
+    }
+
+    if (reviveCounter) {
+      reviveCounter.textContent = reviveUsedOnce ? "0" : "1";
+      if (reviveUsedOnce) {
+        reviveCounter.classList.add("used");
+      } else {
+        reviveCounter.classList.remove("used");
+      }
+    }
+  }
+
   // update special attack button state based on available special attacks
   function updateSpecialAttackButtonState() {
     const playerSpecialAttacks = parseInt(
@@ -76,10 +105,12 @@ document.addEventListener("DOMContentLoaded", () => {
   // Make the function globally accessible
   window.updateDefendButtonState = updateDefendButtonState;
   window.updateSpecialAttackButtonState = updateSpecialAttackButtonState;
+  window.updateItemCounters = updateItemCounters;
 
   // Call this function initially and after each battle turn
   updateDefendButtonState();
   updateSpecialAttackButtonState();
+  updateItemCounters();
 
   if (battleActions) {
     if (attackBtn)
@@ -119,6 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
         potionBtn.disabled = true;
         potionBtn.classList.add("item-used");
         potionUsed = true;
+        updateItemCounters(); // Update counter display
         setTimeout(() => window.location.reload(), 800);
       });
     }
@@ -147,6 +179,7 @@ document.addEventListener("DOMContentLoaded", () => {
         reviveBtn.disabled = true;
         reviveBtn.classList.add("item-used");
         reviveUsed = true;
+        updateItemCounters(); // Update counter display
         // Déclenche un événement custom pour forcer l'affichage des cartes KO cliquables
         window.dispatchEvent(new Event("reviveModeActivated"));
       });
@@ -283,6 +316,7 @@ document.addEventListener("DOMContentLoaded", () => {
           updateBattleLog(MESSAGES.YOUR_TURN);
           updateDefendButtonState(); // update defend button state after each turn
           updateSpecialAttackButtonState(); // update special attack button state after each turn
+          updateItemCounters(); // update item counters after each turn
         }
       } else {
         localStorage.setItem("battleState", "botSelecting");
