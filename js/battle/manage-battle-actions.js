@@ -85,6 +85,8 @@ document.addEventListener("DOMContentLoaded", () => {
         reviveBtn.disabled = true;
         reviveBtn.classList.add('item-used');
         reviveUsed = true;
+        // Déclenche un événement custom pour forcer l'affichage des cartes KO cliquables
+        window.dispatchEvent(new Event('reviveModeActivated'));
       });
     }
   }

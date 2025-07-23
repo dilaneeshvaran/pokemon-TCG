@@ -3,7 +3,7 @@ import {
   displayPlayerActionResult,
   displayBotActionResult,
 } from "./display-battle-actions.js";
-import { updatePokemonHP } from "./update-battle-cards.js";
+import { updatePokemonHP, updateBotActivePokemon, updatePlayerActivePokemon } from "./update-battle-cards.js";
 import { checkForEliminations } from "./manage-eliminations.js";
 
 // Ajout : correspondance type -> effet de statut
@@ -17,7 +17,14 @@ const typeStatusEffect = {
 function applyStatusEffect(target, effect) {
   if (!target.status || target.status === 'none') {
     target.status = effect;
-    target.statusTurns = 3;
+    target.statusTurns = 2;
+  } else if (target.status === effect) {
+    // Si le même effet est déjà appliqué, on incrémente la durée (max 4)
+    target.statusTurns = Math.min((target.statusTurns || 2) + 1, 4);
+  } else {
+    // Si un autre effet est déjà là, on le remplace
+    target.status = effect;
+    target.statusTurns = 2;
   }
 }
 
@@ -26,21 +33,22 @@ function processStatusEffects(card, isPlayer, logArr) {
   let canAct = true;
   let statusMsg = '';
   if (card.status === 'burn') {
-    card.hp -= 10;
-    statusMsg = (isPlayer ? 'Votre' : 'Le') + ' Pokémon est brûlé et perd 10 PV !';
+    card.hp -= 20;
+    statusMsg = (isPlayer ? 'Votre' : 'Le') + ' Pokémon est brûlé et perd 20 PV !';
   } else if (card.status === 'poison') {
-    card.hp -= 8;
-    statusMsg = (isPlayer ? 'Votre' : 'Le') + ' Pokémon est empoisonné et perd 8 PV !';
+    card.hp -= 20;
+    statusMsg = (isPlayer ? 'Votre' : 'Le') + ' Pokémon est empoisonné et perd 20 PV !';
   } else if (card.status === 'freeze') {
-    if (Math.random() < 0.5) {
+    card.hp -= 10;
+    if (Math.random() < 0.4) {
       canAct = false;
-      statusMsg = (isPlayer ? 'Votre' : 'Le') + ' Pokémon est gelé et ne peut pas attaquer !';
+      statusMsg = (isPlayer ? 'Votre' : 'Le') + ' Pokémon est gelé, ne peut pas attaquer et perd 10 PV !';
+    } else {
+      statusMsg = (isPlayer ? 'Votre' : 'Le') + ' Pokémon est gelé mais parvient à attaquer (perd 10 PV) !';
     }
-  } else if (card.status === 'paralyze') {
-    if (Math.random() < 0.25) {
-      canAct = false;
-      statusMsg = (isPlayer ? 'Votre' : 'Le') + ' Pokémon est paralysé et ne peut pas attaquer !';
-    }
+  } else if (card.status === 'paralyze' || card.status === 'sleep') {
+    canAct = false;
+    statusMsg = (isPlayer ? 'Votre' : 'Le') + ' Pokémon est paralysé/endormi et ne peut pas attaquer !';
   }
   if (card.statusTurns !== undefined) {
     card.statusTurns--;
@@ -180,18 +188,22 @@ export function processBattleActions(playerAction, botAction) {
   }
 
   // Application des effets de statut lors d'une attaque spéciale
-  if (playerRealAction === "special") {
+  if (playerRealAction === "special" && !playerSpecialFailed) {
     const effect = typeStatusEffect[playerActivePokemonCard.type];
-    if (effect && (!botActivePokemonCard.status || botActivePokemonCard.status === 'none') && Math.random() < 0.8) {
+    if (effect && Math.random() < 0.8) {
       applyStatusEffect(botActivePokemonCard, effect);
       statusMessages.push(`Votre attaque spéciale inflige l'effet ${effect === 'burn' ? 'brûlure' : effect === 'freeze' ? 'gel' : effect === 'poison' ? 'empoisonnement' : effect === 'paralyze' ? 'paralysie' : effect} !`);
+      // MAJ visuelle immédiate
+      updateBotActivePokemon(botActivePokemonCard);
     }
   }
-  if (botRealAction === "special") {
+  if (botRealAction === "special" && !botSpecialFailed) {
     const effect = typeStatusEffect[botActivePokemonCard.type];
-    if (effect && (!playerActivePokemonCard.status || playerActivePokemonCard.status === 'none') && Math.random() < 0.8) {
+    if (effect && Math.random() < 0.8) {
       applyStatusEffect(playerActivePokemonCard, effect);
       statusMessages.push(`L'attaque spéciale adverse inflige l'effet ${effect === 'burn' ? 'brûlure' : effect === 'freeze' ? 'gel' : effect === 'poison' ? 'empoisonnement' : effect === 'paralyze' ? 'paralysie' : effect} !`);
+      // MAJ visuelle immédiate
+      updatePlayerActivePokemon(playerActivePokemonCard);
     }
   }
 

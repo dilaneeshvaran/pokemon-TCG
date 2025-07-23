@@ -108,6 +108,9 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.removeItem("battleHandCards");
         localStorage.removeItem("battleBotCards");
         localStorage.removeItem("battleState");
+        // Ajout : réinitialise l'utilisation de la potion et du rappel
+        localStorage.removeItem("potionUsedOnce");
+        localStorage.removeItem("reviveUsedOnce");
         window.location.href = "index.html";
       });
     });

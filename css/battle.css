@@ -613,3 +613,77 @@
 .rating-ignore-btn:hover {
   background-color: #7a7a7a;
 }
+
+.revive-selectable {
+  opacity: 1 !important;
+  filter: none !important;
+  cursor: pointer !important;
+  box-shadow: 0 0 10px 2px #ffcb05 !important;
+  position: relative;
+  z-index: 20;
+}
+.revive-selectable .eliminated-overlay {
+  background-color: rgba(255, 203, 5, 0.3) !important;
+  color: #008000 !important;
+  pointer-events: none;
+}
+
+.status-badge {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 15;
+  font-size: 1.3rem;
+  padding: 2px 8px;
+  border-radius: 50%;
+  font-weight: bold;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  background: #fff;
+  border-width: 2px;
+  border-style: solid;
+  min-width: 32px;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.status-indicator {
+  margin-top: 8px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  padding: 2px 10px;
+  background: #f7f7f7;
+  min-height: 28px;
+  min-width: 60px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+}
+.status-indicator.status-burn { color: #d7263d; border: 1.5px solid #d7263d; background: #ffeaea; }
+.status-indicator.status-freeze { color: #009ffd; border: 1.5px solid #009ffd; background: #eaf6ff; }
+.status-indicator.status-poison { color: #6a0572; border: 1.5px solid #6a0572; background: #f7eaff; }
+.status-indicator.status-paralyze { color: #ffd600; border: 1.5px solid #ffd600; background: #fffbe6; }
+.card-status-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.pokemon-card-main {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.status-turns {
+  font-size: 0.95em;
+  color: #333;
+  margin-left: 4px;
+  font-weight: normal;
+  opacity: 0.8;
+}

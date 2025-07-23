@@ -10,60 +10,67 @@ document.addEventListener("DOMContentLoaded", () => {
   const battleState = localStorage.getItem("battleState");
   const battleLog = document.getElementById("battleLog");
 
-  if (playerCards) {
-    const battleHandCards =
-      JSON.parse(localStorage.getItem("battleHandCards")) || [];
-    playerCards.innerHTML = "";
+  function renderPlayerHand() {
+    if (playerCards) {
+      const battleHandCards =
+        JSON.parse(localStorage.getItem("battleHandCards")) || [];
+      playerCards.innerHTML = "";
+      const battleState = localStorage.getItem("battleState");
 
-    battleHandCards.forEach((pokemon) => {
-      if (!pokemon.name) return;
+      battleHandCards.forEach((pokemon) => {
+        if (!pokemon.name) return;
 
-      const card = document.createElement("div");
+        const card = document.createElement("div");
 
-      if (pokemon.eliminated) {
-        card.className = `pokemon-card eliminated-card type-${pokemon.type}`;
-        card.dataset.pokemonId = pokemon.id;
-        card.id = `pokemon-card-${pokemon.id}`;
-        card.innerHTML = generateCardHTML(pokemon, true);
-        // Ajout : rendre la carte KO cliquable si reviveMode
-        if (localStorage.getItem('reviveMode') === '1') {
-          card.classList.add('revive-selectable');
-          card.style.cursor = 'pointer';
-          card.title = 'Cliquez pour ressusciter ce Pokémon';
-          card.addEventListener('click', () => {
-            // Résurrection
-            if (!pokemon.maxHp) pokemon.maxHp = pokemon.hp || 100;
-            pokemon.hp = Math.floor((pokemon.maxHp || 100) * 0.5);
-            pokemon.eliminated = false;
-            pokemon.status = 'none';
-            pokemon.statusTurns = 0;
-            // Met à jour la main
-            const hand = JSON.parse(localStorage.getItem('battleHandCards')) || [];
-            const idx = hand.findIndex(c => c.id === pokemon.id);
-            if (idx !== -1) hand[idx] = pokemon;
-            localStorage.setItem('battleHandCards', JSON.stringify(hand));
-            localStorage.removeItem('reviveMode');
-            // Message et refresh
-            if (battleLog) battleLog.innerHTML = `<div class='battle-log-message'>${pokemon.name} a été ressuscité !</div>`;
-            setTimeout(() => window.location.reload(), 900);
-          });
+        if (pokemon.eliminated) {
+          card.className = `pokemon-card eliminated-card type-${pokemon.type}`;
+          card.dataset.pokemonId = pokemon.id;
+          card.id = `pokemon-card-${pokemon.id}`;
+          card.innerHTML = generateCardHTML(pokemon, true);
+          // Ajout : rendre la carte KO cliquable si reviveMode
+          if (localStorage.getItem('reviveMode') === '1') {
+            card.classList.add('revive-selectable');
+            card.style.cursor = 'pointer';
+            card.title = 'Cliquez pour ressusciter ce Pokémon';
+            card.addEventListener('click', () => {
+              // Met à jour la main depuis le localStorage
+              const hand = JSON.parse(localStorage.getItem('battleHandCards')) || [];
+              const idx = hand.findIndex(c => c.id === pokemon.id);
+              if (idx !== -1) {
+                if (!hand[idx].maxHp) hand[idx].maxHp = hand[idx].hp || 100;
+                hand[idx].hp = Math.floor((hand[idx].maxHp || 100) * 0.5);
+                hand[idx].eliminated = false;
+                hand[idx].status = 'none';
+                hand[idx].statusTurns = 0;
+                localStorage.setItem('battleHandCards', JSON.stringify(hand));
+                localStorage.removeItem('reviveMode');
+                if (battleLog) battleLog.innerHTML = `<div class='battle-log-message'>${hand[idx].name} a été ressuscité !</div>`;
+                renderPlayerHand();
+              }
+            });
+          }
+        } else {
+          card.className = `pokemon-card type-${pokemon.type}`;
+          card.dataset.pokemonId = pokemon.id;
+          card.id = `pokemon-card-${pokemon.id}`;
+          card.innerHTML = generateCardHTML(pokemon);
+
+          if (battleState === "playerSelecting") {
+            card.setAttribute("draggable", true);
+            card.classList.add("selectable-card");
+          }
         }
-      } else {
-        card.className = `pokemon-card type-${pokemon.type}`;
-        card.dataset.pokemonId = pokemon.id;
-        card.id = `pokemon-card-${pokemon.id}`;
-        card.innerHTML = generateCardHTML(pokemon);
 
-        if (battleState === "playerSelecting") {
-          card.setAttribute("draggable", true);
-          card.classList.add("selectable-card");
-        }
-      }
-
-      playerCards.appendChild(card);
-    });
-    displayActivePokemonPlayer();
+        playerCards.appendChild(card);
+      });
+      displayActivePokemonPlayer();
+    }
   }
+
+  renderPlayerHand();
+
+  // Ajout : écoute l'événement custom pour forcer la mise à jour de la main lors du rappel
+  window.addEventListener('reviveModeActivated', renderPlayerHand);
 
   function displayActivePokemonPlayer() {
     if (playerActivePokemon) {
@@ -73,6 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const botActivePokemonCard = JSON.parse(
         localStorage.getItem("botActivePokemonCard")
       );
+      const battleState = localStorage.getItem("battleState");
 
       if (battleState === "playerSelecting") {
         playerActivePokemon.classList.add("active-card-dropzone");
