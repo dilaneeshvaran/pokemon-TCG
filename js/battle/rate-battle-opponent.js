@@ -1,6 +1,9 @@
 export function rateTheOpponent() {
   const attackBtn = document.getElementById("attackBtn");
   const defendBtn = document.getElementById("defendBtn");
+  const specialBtn = document.getElementById("specialAttackBtn");
+  const potionBtn = document.getElementById("potionBtn");
+  const reviveBtn = document.getElementById("reviveBtn");
   const battleLog = document.getElementById("battleLog");
   const battleActions = document.querySelector(".battle-actions");
 
@@ -32,6 +35,18 @@ export function rateTheOpponent() {
     defendBtn.removeEventListener("click", window.handlePlayerAction);
     defendBtn.addEventListener("click", ignoreRatingAndReturn);
   }
+
+  // Hide the special attack, potion, and rappel buttons during rating
+  if (specialBtn) {
+    specialBtn.style.display = "none";
+  }
+  if (potionBtn) {
+    potionBtn.style.display = "none";
+  }
+  if (reviveBtn) {
+    reviveBtn.style.display = "none";
+  }
+
   battleActions.style.display = "flex";
 
   initializeRating();

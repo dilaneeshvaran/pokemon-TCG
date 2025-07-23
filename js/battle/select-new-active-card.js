@@ -154,7 +154,8 @@ function handleCardDrop(e) {
 
         // update defend button state after switching poki
         const updateDefendButtonState = window.updateDefendButtonState;
-        const updateSpecialAttackButtonState = window.updateSpecialAttackButtonState;
+        const updateSpecialAttackButtonState =
+          window.updateSpecialAttackButtonState;
         if (updateDefendButtonState) {
           updateDefendButtonState();
         }
