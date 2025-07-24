@@ -2,7 +2,6 @@ import { drawPack } from "../pokemon-api.js";
 import { selectNewActivePokemon } from "./select-new-active-card.js";
 import { showAlertPopup, showConfirmPopup } from "./helper/popup-utilities.js";
 
-//
 document.addEventListener("DOMContentLoaded", () => {
   const battleBtn = document.getElementById("battleBtn");
   const exitBattleBtn = document.getElementById("exitBattleBtn");
@@ -68,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // reset special attack counters
         localStorage.removeItem("playerSpecialAttacks");
         localStorage.removeItem("botSpecialAttacks");
-        // Ajout : réinitialise l'utilisation de la potion et du rappel
+        // reinitialise l'utilisation de la potion et du rappel
         localStorage.removeItem("potionUsedOnce");
         localStorage.removeItem("reviveUsedOnce");
         window.location.href = "index.html";

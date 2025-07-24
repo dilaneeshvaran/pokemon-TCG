@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
     specialBtn.id = "specialAttackBtn";
     specialBtn.textContent = "Attaque spéciale";
     specialBtn.className = "battle-btn special-btn";
-    // Insert into the main actions div (battle actions)
+    // insert the special items buttons into the main actions div (battle actions)
     const mainActions = document.querySelector(".main-actions");
     if (mainActions && defendBtn) {
       mainActions.insertBefore(specialBtn, defendBtn);
@@ -112,6 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
   updateSpecialAttackButtonState();
   updateItemCounters();
 
+  // process selected battle actions
   if (battleActions) {
     if (attackBtn)
       attackBtn.addEventListener("click", () => handlePlayerAction("attack"));
@@ -180,20 +181,18 @@ document.addEventListener("DOMContentLoaded", () => {
         reviveBtn.classList.add("item-used");
         reviveUsed = true;
         updateItemCounters(); // Update counter display
-        // Déclenche un événement custom pour forcer l'affichage des cartes KO cliquables
+        // Declenche un évenement custom pour forcer l'affichage des cartes ko cliquables
         window.dispatchEvent(new Event("reviveModeActivated"));
       });
     }
   }
 
-  //exporter pour l'acces global de la fonction handlePlayerAction
+  //exporter pour l'acces global pour le bot
   window.handlePlayerAction = handlePlayerAction;
-
-  // Rendre la fonction accessible globalement pour le bot
   window.getTypeAdvantageInt = getTypeAdvantageInt;
 
   async function handlePlayerAction(playerAction) {
-    // Check if defend is allowed
+    //check if defend is allowed
     if (playerAction === "defend") {
       const playerConsecutiveDefends = parseInt(
         localStorage.getItem("playerConsecutiveDefends") || "0"
@@ -235,8 +234,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const delayInSeconds = Math.floor(Math.random() * 3) + 2;
     await new Promise((resolve) => setTimeout(resolve, delayInSeconds * 1000));
 
-    // Le bot peut aussi choisir l'attaque spéciale
-    // Bot intelligent
+    // Le bot peut aussi choisir l'attaque speciale - bot intelligent
     const playerActivePokemonCard = JSON.parse(
       localStorage.getItem("playerActivePokemonCard")
     );
@@ -253,7 +251,7 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.getItem("botSpecialAttacks") || "0"
       );
 
-      //si pv bot < 40%, privilégier defense (sauf si limite atteinte)
+      // si pv bot < 40%, priviléger defense (sauf si limite atteinte)
       if (
         botActivePokemonCard.hp / (botActivePokemonCard.maxHp || 100) < 0.4 &&
         botConsecutiveDefends < 2

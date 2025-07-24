@@ -30,7 +30,7 @@ export function checkForEliminations() {
     if (battleLog) {
       battleLog.innerHTML = `<div class="battle-log-message">Votre ${playerActivePokemonCard.name} est K.O. !</div>`;
     }
-    // add attack special after defeat player
+    // add 1 attack special for bot after defeating player card
     const botSpecialAttacks = parseInt(
       localStorage.getItem("botSpecialAttacks") || "0"
     );
@@ -47,7 +47,7 @@ export function checkForEliminations() {
     if (battleLog) {
       battleLog.innerHTML = `<div class="battle-log-message">Le ${botActivePokemonCard.name} adversaire est K.O. !</div>`;
     }
-    // increment player special attack after defeat enemy
+    // increment player special attack after defeating a enemy card
     const playerSpecialAttacks = parseInt(
       localStorage.getItem("playerSpecialAttacks") || "0"
     );
@@ -214,7 +214,7 @@ export function declareWinner(winner) {
     battleActions.style.display = "none";
   }
 
-  // Hide the item counters when battle ends
+  // hide the item counters if battle ends
   if (potionCounter) {
     potionCounter.style.display = "none";
   }

@@ -1,58 +1,72 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <title>Échange de cartes Pokémon</title>
-  <link rel="stylesheet" href="css/style.css" />
-</head>
-<body>
-  <div class="container">
-    <h1 class="page-title exchange-header"><span class="exchange-icon">🔄</span> Échanger des cartes Pokémon</h1>
-    <p class="exchange-description">Glissez une carte de votre main dans la zone "Votre proposition" pour proposer un échange avec le bot. Le bot choisira une carte au hasard à échanger avec vous.</p>
-    <hr class="exchange-separator" />
-    <div class="action-area">
-      <div id="timerDisplay"></div>
-    </div>
-   
-    <div class="exchange-section" id="user-hand-section">
-      <h3>Votre catalogue</h3>
-      <div id="userCatalogContainer" class="card-container"></div>
-    </div>
-    <div class="exchange-area" style="margin-top:0;">
-      <div class="exchange-section">
-        <h3>Votre proposition</h3>
-        <div id="playerSelectedCard" class="card-container dropzone" style="justify-content:center;"></div>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Échange de cartes Pokémon</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="page-title exchange-header">
+        <span class="exchange-icon">🔄</span> Échanger des cartes Pokémon
+      </h1>
+      <p class="exchange-description">
+        Glissez une carte de votre main dans la zone "Votre proposition" pour
+        proposer un échange avec le bot. Le bot choisira une carte au hasard à
+        échanger avec vous.
+      </p>
+      <hr class="exchange-separator" />
+      <div class="action-area">
+        <div id="timerDisplay"></div>
       </div>
-      <div class="vs-badge">⇄</div>
-      <div class="exchange-section">
-        <h3>Proposition du bot</h3>
-        <div id="botSelectedCard" class="card-container dropzone" style="justify-content:center;"></div>
+
+      <div class="exchange-section" id="user-hand-section">
+        <h3>Votre catalogue</h3>
+        <div id="userCatalogContainer" class="card-container"></div>
+      </div>
+      <div class="exchange-area" style="margin-top: 0">
+        <div class="exchange-section">
+          <h3>Votre proposition</h3>
+          <div
+            id="playerSelectedCard"
+            class="card-container dropzone"
+            style="justify-content: center"
+          ></div>
+        </div>
+        <div class="vs-badge">⇄</div>
+        <div class="exchange-section">
+          <h3>Proposition du bot</h3>
+          <div
+            id="botSelectedCard"
+            class="card-container dropzone"
+            style="justify-content: center"
+          ></div>
+        </div>
+      </div>
+      <div class="action-area" id="exchangeActionArea" style="display: none">
+        <button id="validateExchangeBtn">✅ Valider l'échange</button>
+        <button id="cancelExchangeBtn">❌ Annuler</button>
+      </div>
+      <hr class="exchange-separator" />
+      <div class="action-area">
+        <button id="homeBtn">🏠 Retour à l'accueil</button>
       </div>
     </div>
-    <div class="action-area" id="exchangeActionArea" style="display:none;">
-      <button id="validateExchangeBtn">✅ Valider l'échange</button>
-      <button id="cancelExchangeBtn">❌ Annuler</button>
-    </div>
-    <hr class="exchange-separator" />
-    <div class="action-area">
-      <button id="homeBtn">🏠 Retour à l'accueil</button>
-    </div>
-  </div>
 
-  <script type="module" src="trade/trade.js"></script>
-  <script>
-    document.getElementById('homeBtn').addEventListener('click', function() {
-      window.location.href = 'index.html';
-    });
-  </script>
+    <script type="module" src="trade/trade.js"></script>
+    <script>
+      document.getElementById("homeBtn").addEventListener("click", function () {
+        window.location.href = "index.html";
+      });
+    </script>
 
-  <!-- Popup de confirmation d'échange -->
-  <div id="confirmExchangeModal" class="popup-overlay hidden">
-    <div class="popup-content">
-      <p>Voulez-vous vraiment valider cet échange ?</p>
-      <button id="confirmExchangeBtn" class="blue-btn">Confirmer</button>
-      <button id="cancelExchangeModalBtn" class="blue-btn">Annuler</button>
+    <!-- Popup de confirmation d'echange -->
+    <div id="confirmExchangeModal" class="popup-overlay hidden">
+      <div class="popup-content">
+        <p>Voulez-vous vraiment valider cet échange ?</p>
+        <button id="confirmExchangeBtn" class="blue-btn">Confirmer</button>
+        <button id="cancelExchangeModalBtn" class="blue-btn">Annuler</button>
+      </div>
     </div>
-  </div>
-</body>
+  </body>
 </html>

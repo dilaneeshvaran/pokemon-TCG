@@ -38,7 +38,7 @@ export function rateTheOpponent() {
     defendBtn.addEventListener("click", ignoreRatingAndReturn);
   }
 
-  // Hide the special attack, potion, and rappel buttons during rating
+  // hide the special attack, potion, special item counters and rappel buttons during rating
   if (specialBtn) {
     specialBtn.style.display = "none";
   }
@@ -48,7 +48,6 @@ export function rateTheOpponent() {
   if (reviveBtn) {
     reviveBtn.style.display = "none";
   }
-  // hide special item counters during rating
   if (potionCounter) {
     potionCounter.style.display = "none";
   }
@@ -91,13 +90,13 @@ function ignoreRatingAndReturn() {
   resetBattleStateAndRedirect();
 }
 
+// reset battle data once rating form submited or ignored
 function resetBattleStateAndRedirect() {
   localStorage.removeItem("playerActivePokemonCard");
   localStorage.removeItem("botActivePokemonCard");
   localStorage.removeItem("battleHandCards");
   localStorage.removeItem("battleBotCards");
   localStorage.removeItem("battleState");
-  // Ajout : réinitialise l'utilisation de la potion et du rappel
   localStorage.removeItem("potionUsedOnce");
   localStorage.removeItem("reviveUsedOnce");
 

@@ -69,6 +69,7 @@ function enablePlayerCardSelection() {
   }
 }
 
+// drag and drop
 function enableDragForPlayerCards() {
   const playerCards = document.querySelectorAll(
     "#playerCards .pokemon-card:not(.eliminated-card)"
@@ -152,7 +153,7 @@ function handleCardDrop(e) {
         }
         updateBattleLog(MESSAGES.YOUR_TURN);
 
-        // update defend button state after switching poki
+        // update defend button state after switching pokimon
         const updateDefendButtonState = window.updateDefendButtonState;
         const updateSpecialAttackButtonState =
           window.updateSpecialAttackButtonState;

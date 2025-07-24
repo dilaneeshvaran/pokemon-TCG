@@ -1,8 +1,8 @@
 import { displayDeckCards, displayHandCards } from "./display-cards.js";
 
-// remove one instance of a card while preserving order
+// if card is in group : remove one instance of a card while preserving order
 function removeCardPreservingOrder(cards, cardId) {
-  // Find last occurrence of card to prevent position changes
+  // find last occurrence of card to prevent position changes
   for (let i = cards.length - 1; i >= 0; i--) {
     if (cards[i].id == cardId) {
       return cards.splice(i, 1)[0];
@@ -11,7 +11,7 @@ function removeCardPreservingOrder(cards, cardId) {
   return null;
 }
 
-// move a card group to the end of the deck
+// move a card group to the end of the deck if a new card from hand is moved to that group in deck
 function moveCardGroupToEnd(deckCards, cardToAdd) {
   // remove all instances of this card from deck
   const existingCards = [];
@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const handZone = document.getElementById("handContainer");
   const deckZone = document.getElementById("deckContainer");
 
-  // Drag start sur .pokemon-card (main ou pioche)
+  // drag start sur .pokemon-card (main ou pioche)
   function handleDragStart(e) {
     let card = e.target.closest(".pokemon-card");
     if (!card) return;
@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
       e.target.tagName === "IMG" &&
       e.target.parentElement.parentElement === card
     ) {
-      // Empêche le drag natif de l'image
+      // Empeche le drag natif de l'image
       e.preventDefault();
       return;
     }
@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
     deckZone.classList.remove("dragover");
   }
 
-  // Ajoute les listeners à chaque conteneur (main et pioche)
+  // Ajoute les listeners a chaque conteneur (main et pioche)
   [handZone, deckZone].forEach((zone) => {
     zone.addEventListener("dragstart", handleDragStart);
     zone.addEventListener("dragend", handleDragEnd);
@@ -85,13 +85,14 @@ document.addEventListener("DOMContentLoaded", () => {
     deckZone.classList.remove("dragover");
   });
 
-  // Drop dans la main
+  // drop dans la main
   handZone.addEventListener("drop", (e) => {
     e.preventDefault();
     handZone.classList.remove("dragover");
     const cardId = e.dataTransfer.getData("text/plain");
     const source = e.dataTransfer.getData("source-container");
-    if (source === "handContainer") return; // déjà dans la main
+
+    if (source === "handContainer") return; // déja dans la main
     let deckCards = JSON.parse(localStorage.getItem("deckCards")) || [];
     let handCards = JSON.parse(localStorage.getItem("handCards")) || [];
 
@@ -109,7 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem("handCards", JSON.stringify(handCards));
     displayDeckCards();
     displayHandCards();
-    // Ajoute l'animation à la dernière carte de la main
+    // ajoute l'animation a la derniere carte de la main
     setTimeout(() => {
       const cards = handZone.querySelectorAll(".pokemon-card");
       if (cards.length > 0) {
@@ -126,13 +127,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 30);
   });
 
-  // Drop dans la pioche
+  // drop dans la pioche
   deckZone.addEventListener("drop", (e) => {
     e.preventDefault();
     deckZone.classList.remove("dragover");
     const cardId = e.dataTransfer.getData("text/plain");
     const source = e.dataTransfer.getData("source-container");
-    if (source === "deckContainer") return; // déjà dans la pioche
+    if (source === "deckContainer") return; // deja dans la pioche
     let deckCards = JSON.parse(localStorage.getItem("deckCards")) || [];
     let handCards = JSON.parse(localStorage.getItem("handCards")) || [];
 
@@ -144,15 +145,19 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem("handCards", JSON.stringify(handCards));
     displayDeckCards();
     displayHandCards();
-    // Ajoute l'animation à la dernière carte de la pioche
+    // Ajoute l'animation a la derniere carte de la pioche
     setTimeout(() => {
-      const cards = deckZone.querySelectorAll('.pokemon-card');
+      const cards = deckZone.querySelectorAll(".pokemon-card");
       if (cards.length > 0) {
         const lastCard = cards[cards.length - 1];
-        lastCard.classList.add('card-drop-animate');
-        lastCard.addEventListener('animationend', () => {
-          lastCard.classList.remove('card-drop-animate');
-        }, { once: true });
+        lastCard.classList.add("card-drop-animate");
+        lastCard.addEventListener(
+          "animationend",
+          () => {
+            lastCard.classList.remove("card-drop-animate");
+          },
+          { once: true }
+        );
       }
     }, 30);
   });

@@ -1,6 +1,7 @@
 const playerSelectedAction = document.getElementById("playerSelectedAction");
 const botSelectedAction = document.getElementById("botSelectedAction");
 
+//display the selected action's round badge
 export function displayPlayerAction(action) {
   if (playerSelectedAction) {
     playerSelectedAction.innerHTML = createActionBadge(action);

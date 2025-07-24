@@ -14,7 +14,7 @@ export function displayDeckCards() {
     return;
   }
 
-  // Group cards by ID while preserving order
+  // group cards by id while preserving order
   const { groupedCards, cardOrder } = groupCardsByIdPreservingOrder(deckCards);
 
   cardOrder.forEach((cardId) => {
