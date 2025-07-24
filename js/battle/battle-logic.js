@@ -10,7 +10,7 @@ import {
 } from "./update-battle-cards.js";
 import { checkForEliminations } from "./manage-eliminations.js";
 
-// Ajout : correspondance type -> effet de statut
+// correspondance type -> effet de statut
 const typeStatusEffect = {
   fire: "burn",
   ice: "freeze",
@@ -18,20 +18,22 @@ const typeStatusEffect = {
   electric: "paralyze",
 };
 
+// special damage effects
 function applyStatusEffect(target, effect) {
   if (!target.status || target.status === "none") {
     target.status = effect;
     target.statusTurns = 2;
   } else if (target.status === effect) {
-    // Si le même effet est déjà appliqué, on incrémente la durée (max 4)
+    // Si le meme effet est deja appliqué, on incremente la durée (max 4)
     target.statusTurns = Math.min((target.statusTurns || 2) + 1, 4);
   } else {
-    // Si un autre effet est déjà là, on le remplace
+    // Si un autre effet est déja la, on le remplace
     target.status = effect;
     target.statusTurns = 2;
   }
 }
 
+// logic special damage system
 function processStatusEffects(card, isPlayer, logArr) {
   if (!card.status || card.status === "none") return { canAct: true };
   let canAct = true;
@@ -76,6 +78,7 @@ function processStatusEffects(card, isPlayer, logArr) {
   return { canAct };
 }
 
+// main battle actions processing
 export function processBattleActions(playerAction, botAction) {
   const playerActivePokemonCard = JSON.parse(
     localStorage.getItem("playerActivePokemonCard")
@@ -148,7 +151,7 @@ export function processBattleActions(playerAction, botAction) {
     );
   }
 
-  // Appliquer les effets de statut AVANT les actions
+  // Appliquer les effets de statut AVANT les actions (special damage fx)
   const playerStatus = processStatusEffects(
     playerActivePokemonCard,
     true,
@@ -160,8 +163,7 @@ export function processBattleActions(playerAction, botAction) {
     statusMessages
   );
 
-  //logic
-  // Cas attaque spéciale
+  // Special attack logic
   // Si gelé/paralysé et ne peut pas agir, l'action devient "none"
   let playerSpecialFailed = false;
   let botSpecialFailed = false;
@@ -296,7 +298,7 @@ export function processBattleActions(playerAction, botAction) {
             : effect
         } !`
       );
-      // MAJ visuelle immédiate
+      // update visuelle immediate
       updateBotActivePokemon(botActivePokemonCard);
     }
   }
@@ -317,7 +319,7 @@ export function processBattleActions(playerAction, botAction) {
             : effect
         } !`
       );
-      // MAJ visuelle immédiate
+      // update card instantly
       updatePlayerActivePokemon(playerActivePokemonCard);
     }
   }
@@ -335,7 +337,7 @@ export function processBattleActions(playerAction, botAction) {
     JSON.stringify(botActivePokemonCard)
   );
 
-  //affiche les resultats
+  //affiche les resultats des actions
   const battleLog = document.getElementById("battleLog");
 
   if (battleLog) {

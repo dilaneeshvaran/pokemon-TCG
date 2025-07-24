@@ -500,7 +500,7 @@ body {
   background-color: #0f7ae5;
 }
 
-/* --- Masquer la popup par défaut --- */
+/* hide popup par defatut --- */
 .hidden {
   display: none;
 }
@@ -516,7 +516,7 @@ body {
   display: inline-block;
 }
 
-/* Style global pour tous les boutons du projet */
+/* global pour tous les boutons du projet */
 .blue-btn {
   background: linear-gradient(90deg, #1e90ff 0%, #4fc3f7 100%);
   color: white;
@@ -548,13 +548,7 @@ button:active,
   filter: brightness(0.97);
 }
 
-/*
-Pour appliquer ce style à un <a> ou <input>, ajoute simplement la classe .btn :
-<a href="#" class="btn">Mon bouton</a>
-<input type="button" class="btn" value="Mon bouton" />
-*/
-
-/* Style pour les champs de recherche et de filtre sur la page catalog */
+/* global les champs de recherche et de filtre sur la page catalog */
 .filters input[type="text"],
 .filters select {
   padding: 10px 16px;
@@ -618,7 +612,7 @@ Pour appliquer ce style à un <a> ou <input>, ajoute simplement la classe .btn :
   z-index: 10;
 }
 
-/* --- Styles spécifiques à la page d'échange de cartes --- */
+/* ---la page d'echange de cartes --- */
 .exchange-area {
   display: flex;
   justify-content: center;
@@ -805,7 +799,7 @@ button {
   margin-top: 15px;
 }
 
-/* --- Améliorations spécifiques à la page d'échange --- */
+/* --- la page d'échange --- */
 .exchange-header {
   font-size: 2.3em;
   font-weight: bold;
@@ -836,7 +830,7 @@ button {
   width: 100%;
 }
 
-/* Dropzone highlight amélioré */
+/* Dropzone highlight  */
 .dropzone,
 .card-slot {
   min-height: 220px;
@@ -856,7 +850,7 @@ button {
   box-shadow: 0 0 0 4px #4fc3f7, 0 4px 24px rgba(30, 144, 255, 0.1);
 }
 
-/* Amélioration des boutons d'action d'échange */
+/* boutons d'action d'échange */
 #exchangeActionArea button {
   font-size: 1.15em;
   padding: 12px 32px;
@@ -905,7 +899,7 @@ button {
   }
 }
 
-/* Amélioration de la zone d'échange */
+/*  zone d'échange */
 .exchange-section {
   box-shadow: 0 2px 12px rgba(30, 144, 255, 0.1), 0 1px 2px rgba(0, 0, 0, 0.04);
   border: 1.5px solid #e3f2fd;
@@ -913,7 +907,7 @@ button {
   margin-bottom: 0;
 }
 
-/* Effet visuel sur VS badge */
+/* Effet visuel sur vs badge */
 .vs-badge {
   background: linear-gradient(90deg, #ff5252 0%, #1e90ff 100%);
   color: #fff;
@@ -932,14 +926,14 @@ button {
   text-shadow: 0 2px 8px rgba(30, 144, 255, 0.1);
 }
 
-/* Amélioration accessibilité focus */
+/*  accessibilité focus */
 button:focus,
 .dropzone:focus {
   outline: 3px solid #1e90ff;
   outline-offset: 2px;
 }
 
-/* Animation spéciale pour l'attaque spéciale */
+/* Animation speciale pour l'attaque speciale */
 @keyframes specialAttackFlash {
   0% {
     box-shadow: 0 0 0 0 #ffd700, 0 0 0 0 #00e5ff;
@@ -1063,7 +1057,7 @@ button:focus,
   justify-content: flex-start;
   overflow-x: auto;
 }
-/* Spécifique à la page trade : élargir la section catalogue */
+/* page trade : élargir la section catalogue */
 #user-hand-section.exchange-section {
   max-width: none !important;
   width: 100% !important;

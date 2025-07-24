@@ -1,3 +1,4 @@
+//battle cards
 export function generateCardHTML(
   pokemon,
   isEliminated = false,
