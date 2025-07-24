@@ -4,6 +4,8 @@ export function rateTheOpponent() {
   const specialBtn = document.getElementById("specialAttackBtn");
   const potionBtn = document.getElementById("potionBtn");
   const reviveBtn = document.getElementById("reviveBtn");
+  const potionCounter = document.getElementById("potionCounter");
+  const reviveCounter = document.getElementById("reviveCounter");
   const battleLog = document.getElementById("battleLog");
   const battleActions = document.querySelector(".battle-actions");
 
@@ -45,6 +47,13 @@ export function rateTheOpponent() {
   }
   if (reviveBtn) {
     reviveBtn.style.display = "none";
+  }
+  // hide special item counters during rating
+  if (potionCounter) {
+    potionCounter.style.display = "none";
+  }
+  if (reviveCounter) {
+    reviveCounter.style.display = "none";
   }
 
   battleActions.style.display = "flex";

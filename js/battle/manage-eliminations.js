@@ -108,9 +108,30 @@ function lastCardsEliminationCheck(
       } else if (playerActivePokemonCard.attack < botActivePokemonCard.attack) {
         declareWinner("bot");
       } else {
+        // draw = hide battle actions and counters
+        const battleActions = document.querySelector(".battle-actions");
+        const potionCounter = document.getElementById("potionCounter");
+        const reviveCounter = document.getElementById("reviveCounter");
+
+        if (battleActions) {
+          battleActions.style.display = "none";
+        }
+        // hide the item counters when battle ends in draw
+        if (potionCounter) {
+          potionCounter.style.display = "none";
+        }
+        if (reviveCounter) {
+          reviveCounter.style.display = "none";
+        }
+
+        localStorage.setItem("battleState", "finished");
+
         if (battleLog) {
           battleLog.innerHTML = `<div class="battle-log-message">Match nul ! </div>`;
         }
+        setTimeout(() => {
+          rateTheOpponent();
+        }, 5000);
       }
       eliminateActivePokemon("player");
       eliminateActivePokemon("bot");
@@ -186,9 +207,19 @@ function addEliminatedCardToHand(pokemon) {
 export function declareWinner(winner) {
   const battleLog = document.getElementById("battleLog");
   const battleActions = document.querySelector(".battle-actions");
+  const potionCounter = document.getElementById("potionCounter");
+  const reviveCounter = document.getElementById("reviveCounter");
 
   if (battleActions) {
     battleActions.style.display = "none";
+  }
+
+  // Hide the item counters when battle ends
+  if (potionCounter) {
+    potionCounter.style.display = "none";
+  }
+  if (reviveCounter) {
+    reviveCounter.style.display = "none";
   }
 
   localStorage.setItem("battleState", "finished");

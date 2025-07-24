@@ -147,11 +147,6 @@ export function processBattleActions(playerAction, botAction) {
       "Vous ne pouvez plus vous défendre après 2 tours consécutifs ! Action forcée : Attaque"
     );
   }
-  if (botAction === "defend" && botActionAllowed === "attack") {
-    statusMessages.push(
-      "L'adversaire ne peut plus se défendre après 2 tours consécutifs ! Action forcée : Attaque"
-    );
-  }
 
   // Appliquer les effets de statut AVANT les actions
   const playerStatus = processStatusEffects(
